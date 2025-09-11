@@ -1,9 +1,0 @@
-<link rel="stylesheet" href="./TemplateData/style.css">
-<script src="./TemplateData/UnityProgress.js"></script>
-    <script src="./TemplateData/unityloader54.js"></script>
-    <script>
-      var gameInstance = UnityLoader.instantiate("gameContainer", "./Build/granny.json", {onProgress: UnityProgress,Module:{onRuntimeInitialized: function() {UnityProgress(gameInstance, "complete")}}});
-    </script>
-    <div class="webgl-content">
-        <div id="gameContainer" style="width: 100vw; height: 100vh"></div>
-        </div>
