@@ -2,17 +2,17 @@
   {
     "name": "Yohoho.io",
     "id": "yohoho",
-    "description": "Play as a pirate on various themed islands! Open chests and collect doubloons to get bigger. Kill other players to collect their coins, get bigger again! Use your special dash ability to boost your speed and overcome your opponents.",
-    "category": "Shooter",
+    "description": "Play as a pirate on themed islands, collect coins, open chests, and defeat other players using your dash ability.",
+    "category": "Action & Shooter",
     "path": "/g/yohoho/",
     "logo": "/g/yohoho/IMG_4103.jpeg",
     "featured": false,
-    "rating": 1.0
+    "rating": 3.0
   },
   {
     "name": "Poly Track",
     "id": "polytrack",
-    "description": "A fast-paced, low-poly driving game with loops, jumps, and high-speed action, inspired by TrackMania.",
+    "description": "A fast-paced, low-poly driving game with loops, jumps, and high-speed action inspired by TrackMania.",
     "category": "Racing",
     "path": "/g/pt/",
     "logo": "/g/polytrack/pt.jpg",
@@ -22,18 +22,18 @@
   {
     "name": "Geometry Dash",
     "id": "geodash",
-    "description": "Jump and fly your way through danger in this rhythm-based action platformer! Prepare for a near impossible challenge in the world of Geometry Dash. Push your skills to the limit as you jump, fly and flip your way through dangerous passages and spiky obstacles.",
-    "category": "Action",
+    "description": "A rhythm-based action platformer where you jump, fly, and flip through challenging obstacles.",
+    "category": "Action & Platformer",
     "path": "/g/geodash/",
     "logo": "/g/geodash/gd.png",
     "featured": true,
-    "rating": 3.0
+    "rating": 4.0
   },
   {
     "name": "Drive Mad",
     "id": "drivemad",
-    "description": "Drive Mad is an arcade driving game with challenging obstacles and stunts. Navigate tricky courses with precise control for a thrilling experience.",
-    "category": "Action",
+    "description": "An arcade driving game with challenging courses, obstacles, and stunts for a thrilling experience.",
+    "category": "Racing & Action",
     "path": "/g/drivemad/",
     "logo": "/g/drivemad/webapp/cover.jpg",
     "featured": false,
@@ -42,48 +42,48 @@
   {
     "name": "2048",
     "id": "2048",
-    "description": "Join the tiles and reach 2048! Experience this popular and addictive puzzle game. Slide the tiles to combine them and create larger numbers. Can you reach the elusive 2048 tile?",
+    "description": "Slide tiles to combine numbers and reach the 2048 tile in this addictive puzzle game.",
     "category": "Puzzle",
     "path": "/g/2048/",
     "logo": "/g/2048/image.png",
     "featured": false,
-    "rating": 3.0
+    "rating": 3.5
   },
   {
     "name": "Among Us",
     "id": "amongus",
-    "description": "Among Us is a free space-themed online game where up to 15 players play together and are assigned the roles of 'Crewmate' or 'Imposter'. The aim of the game is for the crewmates to identify the players who are the imposters before the imposters can secretly sabotage their tasks and individually kill the crewmates.",
-    "category": "Party social deduction",
+    "description": "A multiplayer social deduction game where players complete tasks or secretly act as imposters.",
+    "category": "Party & Social",
     "path": "/g/Among-Us/",
     "logo": "/g/Among-Us/image.png",
     "featured": false,
-    "rating": 3.0
+    "rating": 3.5
   },
   {
     "name": "Angry Sharks",
     "id": "angrysharks",
-    "description": "Become the ultimate predator in this offline shark game where you'll rule the ocean and eat your way through an underwater world of adventure.",
+    "description": "Become the ultimate predator in this shark-themed action game and rule the underwater world.",
     "category": "Action",
     "path": "/g/AngrySharks/",
     "logo": "/g/AngrySharks/image.png",
     "featured": false,
-    "rating": 1.0
+    "rating": 2.5
   },
   {
     "name": "Awesome Tanks",
     "id": "awesometanks",
-    "description": "Smash enemy tanks, destroy bosses, find secret rooms full of bonuses. Create your own levels in Level Editor and share them with the world. Collect coins to upgrade your tank's stats, purchase and improve weapons. Earn multiple achievements.",
-    "category": "Shooter",
+    "description": "Smash enemy tanks, upgrade your weapons, and create custom levels to challenge players worldwide.",
+    "category": "Action & Shooter",
     "path": "/g/AwesomeTanks/",
     "logo": "/g/AwesomeTanks/image.png",
     "featured": false,
-    "rating": 3.0
+    "rating": 3.5
   },
   {
     "name": "Ballistic Chicken",
     "id": "ballisticchicken",
-    "description": "Ballistic Chicken is a quirky and fun physics-based game where you launch chickens out of a cannon and try to get them to fly as far as possible.",
-    "category": "Action Shooter",
+    "description": "Launch chickens from a cannon and see how far you can make them fly in this quirky physics game.",
+    "category": "Action & Shooter",
     "path": "/g/BallisticChickens/",
     "logo": "/g/BallisticChickens/logo.png",
     "featured": false,
@@ -92,8 +92,8 @@
   {
     "name": "Basketball Random",
     "id": "basketballrandom",
-    "description": "Basket Random is an entertaining and quirky basketball game known for its unpredictable physics and random gameplay elements.",
-    "category": "Action Shooter",
+    "description": "A fun and unpredictable basketball game with quirky physics and random gameplay elements.",
+    "category": "Sports & Action",
     "path": "/g/Basketball-random/",
     "logo": "/g/Basketball-random/splash.jpeg",
     "featured": false,
@@ -102,8 +102,8 @@
   {
     "name": "Basketball Bros",
     "id": "basketballbros",
-    "description": "A fast-paced, one-on-one basketball game featuring a variety of playable characters, each with unique skills and moves.",
-    "category": "Action & adventure",
+    "description": "Fast-paced one-on-one basketball with unique characters and skills.",
+    "category": "Sports & Action",
     "path": "/g/Basketbros/",
     "logo": "/g/Basketbros/thumb.jpg",
     "featured": false,
@@ -112,18 +112,18 @@
   {
     "name": "Bitlife",
     "id": "bitlife",
-    "description": "A text-based life simulation game that allows players to make choices and experience a virtual life.",
+    "description": "A text-based life simulator where players make choices to experience a virtual life.",
     "category": "Life Simulation",
     "path": "/g/BitLife/index.html",
     "logo": "/g/BitLife/splash.png",
     "featured": true,
-    "rating": 3.5
+    "rating": 4.0
   },
   {
     "name": "Ragdoll Hit",
     "id": "ragdollhit",
-    "description": "An action-packed adventure that will keep you on the edge of your seat. Equip your hero, choose your weapons, and dive into the fun physics-based gameplay that makes every fight an epic showdown.",
-    "category": "Action",
+    "description": "Equip your hero and battle in physics-based arenas for epic action-packed fun.",
+    "category": "Action & Adventure",
     "path": "/g/rdh/file/index.html",
     "logo": "/g/rdh/image.png",
     "featured": true,
@@ -132,8 +132,8 @@
   {
     "name": "Breakoid",
     "id": "breakoid",
-    "description": "Players control a paddle that bounces a ball to destroy bricks in a level, progressing through various stages.",
-    "category": "Block-breaker",
+    "description": "Bounce the ball with your paddle to break bricks and progress through challenging levels.",
+    "category": "Puzzle & Block-breaker",
     "path": "/g/Breakoid/index.html",
     "logo": "/g/Breakoid/IMG_1707.png",
     "featured": false,
@@ -142,38 +142,38 @@
   {
     "name": "BreakTheBank (Henry Stickman)",
     "id": "breakthebank",
-    "description": "Help Henry Stickmin break into a bank that's situated in the middle of a desert. Choose one of the risky decisions and watch as the rest of the story unfolds.",
-    "category": "Action",
+    "description": "Help Henry Stickmin break into a bank by choosing from a series of risky decisions.",
+    "category": "Action & Adventure",
     "path": "/g/Breakthebank/index.html",
     "logo": "/g/Breakthebank/breakingthebank.png",
     "featured": false,
-    "rating": 2.0
+    "rating": 3.0
   },
   {
     "name": "Cannonbasket4",
     "id": "cannonbasket4",
-    "description": "Get the ball into the basket to complete the level. Use your mouse to aim and shoot the cannon. Move your mouse further from the cannon to make a more powerful shot.",
+    "description": "Aim and shoot the ball into the basket using physics-based cannon mechanics.",
     "category": "Puzzle & Skill",
     "path": "/g/cannonbasket4/index.html",
     "logo": "/g/cannonbasket4/img/splash.png",
     "featured": false,
-    "rating": 2.0
+    "rating": 2.5
   },
   {
     "name": "Champion Island",
     "id": "championisland",
-    "description": "Compete in a variety of sports challenges in a charming island setting filled with mini-games, challenges, and secrets.",
+    "description": "Compete in sports challenges, mini-games, and discover secrets on a charming island.",
     "category": "Puzzle & Skill",
     "path": "/g/championisland/index.html",
     "logo": "/g/championisland/IMG_2919.png",
     "featured": false,
-    "rating": 2.5
+    "rating": 3.0
   },
   {
     "name": "Territorial.io",
     "id": "territorialio",
     "description": "Expand your territory and dominate the map in this strategic multiplayer game.",
-    "category": "Action",
+    "category": "Strategy & Action",
     "path": "/g/Territorial.io/index.html",
     "logo": "/g/Territorial.io/IMG_2918.png",
     "featured": false,
@@ -182,8 +182,8 @@
   {
     "name": "Creative Kill Chamber",
     "id": "creativekillchamber",
-    "description": "Use creative methods to eliminate enemies and escape each level in this point-and-click action game.",
-    "category": "Action",
+    "description": "Use creative methods to eliminate enemies and escape each level in this action puzzle game.",
+    "category": "Action & Puzzle",
     "path": "/g/ckc/index.html",
     "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png",
     "featured": false,
@@ -192,111 +192,108 @@
   {
     "name": "Minecraft",
     "id": "minecraft",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Explore, build, and survive in this iconic sandbox game with online multiplayer support.",
+    "category": "Sandbox & Action",
     "path": "https://s.mcraft.fun",
     "logo": "/assets/images/IMG_2929.jpeg",
     "featured": true,
     "rating": 4.5
   },
-    {
+  {
     "name": "Cookie Clicker",
     "id": "CC",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "idle games",
+    "description": "An incremental idle game where you bake cookies and unlock upgrades to increase production.",
+    "category": "Idle & Simulation",
     "path": "g/Cookie-Clicker/",
     "logo": "/g/Cookie-Clicker/IMG_1709.jpeg",
     "featured": false,
-    "rating": 3.0
+    "rating": 3.5
   },
-   {
+  {
     "name": "Core Ball",
     "id": "CB",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Puzzles",
+    "description": "Solve puzzles by manipulating balls and cores to reach the goal in each level.",
+    "category": "Puzzle & Skill",
     "path": "/g/Coreball/",
     "logo": "/g/Coreball/IMG_4632.jpeg",
     "featured": false,
     "rating": 3.0
   },
-
-     {
+  {
     "name": "Doge Miner",
     "id": "DM",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "idle games",
+    "description": "Mine resources, collect Dogecoins, and upgrade your operations in this idle mining game.",
+    "category": "Idle & Simulation",
     "path": "/g/Doge-Miner/",
     "logo": "/g/Doge-Miner/IMG_2926.jpeg",
     "featured": false,
-    "rating": 1.5
+    "rating": 2.0
   },
-       {
+  {
     "name": "CSGO Clicker",
     "id": "CSGO",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "idle games",
+    "description": "Click and upgrade to earn points, unlock skins, and experience incremental gameplay.",
+    "category": "Idle & Shooter",
     "path": "/g/CSGO-Clicker/",
     "logo": "/g/CSGO-Clicker/IMG_2921.jpeg",
     "featured": false,
-    "rating": 1.0
+    "rating": 2.0
   },
-        {
+  {
     "name": "Among Us",
     "id": "AU",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "action",
+    "description": "Identify the imposters among crewmates in this social deduction game.",
+    "category": "Party & Action",
     "path": "/g/Among-Us/",
     "logo": "/g/Among-Us/image.png",
     "featured": false,
-    "rating": 2.5
+    "rating": 3.0
   },
-  
   {
     "name": "Drift Boss",
     "id": "DB",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "vroom vroom",
+    "description": "Drift through tracks, earn points, and complete challenges in this fast-paced racing game.",
+    "category": "Racing & Action",
     "path": "/g/Driftboss/",
     "logo": "/g/Driftboss/drift-boss.png",
     "featured": false,
-    "rating": 2.5
+    "rating": 3.0
   },
-    {
+  {
     "name": "Edge Surf",
     "id": "ES",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Perform tricks and surf along challenging edges in this high-speed action game.",
+    "category": "Action & Racing",
     "path": "/g/Edgesurf",
     "logo": "/g/Edgesurf/splash.png",
     "featured": false,
-    "rating": 2.5
+    "rating": 3.0
   },
-      {
+  {
     "name": "EuroCup",
     "id": "EC",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Compete in football matches and tournaments in this sports action game.",
+    "category": "Sports & Action",
     "path": "/g/EuroCup/",
     "logo": "/g/EuroCup/android-icon-192x192.png",
     "featured": false,
     "rating": 4.5
   },
-  
-      {
+  {
     "name": "FactoryBallz",
     "id": "fbs",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Solve complex ball-routing puzzles across multiple levels with creative solutions.",
+    "category": "Puzzle & Strategy",
     "path": "/g/FactoryBallsForever/",
     "logo": "/g/FactoryBallsForever/IMG_2930.jpeg",
     "featured": false,
-    "rating": 3.2
+    "rating": 3.5
   },
-      {
+  {
     "name": "Gunspin",
     "id": "Gs",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Spin your guns and take out enemies in this fast-paced action shooter game.",
+    "category": "Action & Shooter",
     "path": "/g/GunSpin/",
     "logo": "/g/GunSpin/IMG_2653.jpeg",
     "featured": false,
@@ -305,28 +302,28 @@
   {
     "name": "Idle Breakout",
     "id": "IB",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Idle",
+    "description": "Click and automate blocks to progress through this incremental breakout-style game.",
+    "category": "Idle & Puzzle",
     "path": "/g/IdleBreakout/",
     "logo": "/g/IdleBreakout/img/thumbnail.png",
     "featured": false,
-    "rating": 3.0
+    "rating": 3.5
   },
-    {
+  {
     "name": "Monkey Mart",
     "id": "MM",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Idle",
+    "description": "Manage a shop, sell items, and expand your business in this idle management game.",
+    "category": "Idle & Simulation",
     "path": "/g/Monkey-mart/",
     "logo": "/g/Monkey-mart/MonkeyMart.jpeg",
     "featured": false,
-    "rating": 1.5
+    "rating": 2.0
   },
-     {
+  {
     "name": "OvO",
     "id": "OO",
-    "description": "Explore, build, and survive in this iconic sandbox game. Play online through a hosted client.",
-    "category": "Action",
+    "description": "Engage in fast-paced action challenges in this skill-based arcade game.",
+    "category": "Action & Arcade",
     "path": "/g/OVO/",
     "logo": "/g/OVO/IMG_1710.jpeg",
     "featured": false,
