@@ -502,5 +502,23 @@
     "name": "Tetris",
     "url": "g/Tetris/index.html",
     "logo": "g/Tetris/IMG_4717.jpeg"
+  },
+  {
+    "id": "bottlejump",
+    "name": "bottlejump",
+    "url": "g/bottlejump/index.html",
+    "logo": "g/bottlejump/IMG_3025.png"
+  },
+  {
+    "id": "bowmasters",
+    "name": "bowmasters",
+    "url": "g/bowmasters/index.html",
+    "logo": "g/bowmasters/IMG_3026.png"
+  },
+  {
+    "id": "motox3m",
+    "name": "motox3m",
+    "url": "g/motox3m/index.html",
+    "logo": "g/motox3m/IMG_3029.jpeg"
   }
 ]
