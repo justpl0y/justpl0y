@@ -556,5 +556,17 @@
     "name": "richrun",
     "url": "g/richrun/index.html",
     "logo": "g/richrun/IMG_3037.jpeg"
+  },
+  {
+    "id": "bounce-masters",
+    "name": "bounce-masters",
+    "url": "g/bounce-masters/index.html",
+    "logo": "g/bounce-masters/IMG_3046.png"
+  },
+  {
+    "id": "idle-mining-empire",
+    "name": "idle-mining-empire",
+    "url": "g/idle-mining-empire/index.html",
+    "logo": "g/idle-mining-empire/IMG_3043.png"
   }
 ]
