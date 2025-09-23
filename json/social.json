@@ -520,5 +520,41 @@
     "name": "motox3m",
     "url": "g/motox3m/index.html",
     "logo": "g/motox3m/IMG_3029.jpeg"
+  },
+  {
+    "id": "8ball",
+    "name": "8ball",
+    "url": "g/8ball/index.html",
+    "logo": "g/8ball/IMG_3041.jpeg"
+  },
+  {
+    "id": "blackjack",
+    "name": "blackjack",
+    "url": "g/blackjack/index.html",
+    "logo": "g/blackjack/IMG_3038.png"
+  },
+  {
+    "id": "blockblast",
+    "name": "blockblast",
+    "url": "g/blockblast/index.html",
+    "logo": "g/blockblast/IMG_3021.jpeg"
+  },
+  {
+    "id": "candycrush",
+    "name": "candycrush",
+    "url": "g/candycrush/index.html",
+    "logo": "g/candycrush/IMG_3040.webp"
+  },
+  {
+    "id": "paperio2",
+    "name": "paperio2",
+    "url": "g/paperio2/index.html",
+    "logo": "g/paperio2/IMG_3042.webp"
+  },
+  {
+    "id": "richrun",
+    "name": "richrun",
+    "url": "g/richrun/index.html",
+    "logo": "g/richrun/IMG_3037.jpeg"
   }
 ]
