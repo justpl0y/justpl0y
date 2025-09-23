@@ -23,7 +23,7 @@ for game in "$GAMES_DIR"/*; do
       echo "➕ Adding $game_name"
 
       # first image in folder for logo
-      logo_file=$(find "$game" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' \) | head -n1)
+      logo_file=$(find "$game" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) | head -n1)
       if [ -n "$logo_file" ]; then
         # relative path from current directory
         logo_rel="${logo_file#./}"
