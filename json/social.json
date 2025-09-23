@@ -6,12 +6,6 @@
     "logo": "/g/yohoho/IMG_4103.jpeg"
   },
   {
-    "id": "yohoho",
-    "name": "Yohoho.io",
-    "url": "/g/yohoho/",
-    "logo": "/g/yohoho/IMG_4103.jpeg"
-  },
-  {
     "id": "polytrack",
     "name": "Poly Track",
     "url": "/g/polytrack/",
@@ -163,19 +157,19 @@
   },
   {
     "id": "eurocup",
-    "name": "EuroCup",
+    "name": "Euro Cup",
     "url": "/g/EuroCup/",
     "logo": "/g/EuroCup/android-icon-192x192.png"
   },
   {
     "id": "factoryballsforever",
-    "name": "FactoryBallz",
+    "name": "Factory Ballz",
     "url": "/g/FactoryBallsForever/",
     "logo": "/g/FactoryBallsForever/IMG_2930.jpeg"
   },
   {
     "id": "gunspin",
-    "name": "Gunspin",
+    "name": "Gun Spin",
     "url": "/g/GunSpin/",
     "logo": "/g/GunSpin/IMG_2653.jpeg"
   },
@@ -198,206 +192,14 @@
     "logo": "/g/OVO/IMG_1710.jpeg"
   },
   {
-    "id": "polytrack",
-    "name": "Poly Track",
-    "url": "/g/polytrack/",
-    "logo": "/g/polytrack/pt.jpg"
-  },
-  {
-    "id": "geodash",
-    "name": "Geometry Dash",
-    "url": "/g/geodash/",
-    "logo": "/g/geodash/gd.png"
-  },
-  {
-    "id": "drivemad",
-    "name": "Drive Mad",
-    "url": "/g/drivemad/",
-    "logo": "/g/drivemad/webapp/cover.jpg"
-  },
-  {
-    "id": "2048",
-    "name": "2048",
-    "url": "/g/2048/",
-    "logo": "/g/2048/image.png"
-  },
-  {
-    "id": "amongus",
-    "name": "Among Us",
-    "url": "/g/Among-Us/",
-    "logo": "/g/Among-Us/image.png"
-  },
-  {
-    "id": "angrysharks",
-    "name": "Angry Sharks",
-    "url": "/g/AngrySharks/",
-    "logo": "/g/AngrySharks/image.png"
-  },
-  {
-    "id": "awesometanks",
-    "name": "Awesome Tanks",
-    "url": "/g/AwesomeTanks/",
-    "logo": "/g/AwesomeTanks/image.png"
-  },
-  {
-    "id": "ballisticchicken",
-    "name": "Ballistic Chicken",
-    "url": "/g/BallisticChickens/",
-    "logo": "/g/BallisticChickens/logo.png"
-  },
-  {
-    "id": "basketballrandom",
-    "name": "Basketball Random",
-    "url": "/g/Basketball-random/",
-    "logo": "/g/Basketball-random/splash.jpeg"
-  },
-  {
-    "id": "basketballbros",
-    "name": "Basketball Bros",
-    "url": "/g/Basketbros/",
-    "logo": "/g/Basketbros/thumb.jpg"
-  },
-  {
-    "id": "bitlife",
-    "name": "Bitlife",
-    "url": "/g/BitLife/index.html",
-    "logo": "/g/BitLife/splash.png"
-  },
-  {
-    "id": "ragdollhit",
-    "name": "Ragdoll Hit",
-    "url": "/g/rdh/file/index.html",
-    "logo": "/g/rdh/image.png"
-  },
-  {
-    "id": "breakoid",
-    "name": "Breakoid",
-    "url": "/g/Breakoid/index.html",
-    "logo": "/g/Breakoid/IMG_1707.png"
-  },
-  {
-    "id": "breakthebank",
-    "name": "BreakTheBank (Henry Stickman)",
-    "url": "/g/Breakthebank/index.html",
-    "logo": "/g/Breakthebank/breakingthebank.png"
-  },
-  {
-    "id": "cannonbasket4",
-    "name": "Cannonbasket4",
-    "url": "/g/cannonbasket4/index.html",
-    "logo": "/g/cannonbasket4/img/splash.png"
-  },
-  {
-    "id": "championisland",
-    "name": "Champion Island",
-    "url": "/g/championisland/index.html",
-    "logo": "/g/championisland/IMG_2919.png"
-  },
-  {
-    "id": "territorialio",
-    "name": "Territorial.io",
-    "url": "/g/Territorial.io/index.html",
-    "logo": "/g/Territorial.io/IMG_2918.png"
-  },
-  {
-    "id": "creativekillchamber",
-    "name": "Creative Kill Chamber",
-    "url": "/g/ckc/index.html",
-    "logo": "/g/ckc/IMG_2664_enhanced.jpeg.png"
-  },
-  {
-    "id": "minecraft",
-    "name": "Minecraft",
-    "url": "https://s.mcraft.fun",
-    "logo": "/assets/images/IMG_2929.jpeg"
-  },
-  {
-    "id": "CC",
-    "name": "Cookie Clicker",
-    "url": "g/Cookie-Clicker/",
-    "logo": "/g/Cookie-Clicker/IMG_1709.jpeg"
-  },
-  {
-    "id": "CB",
-    "name": "Core Ball",
-    "url": "/g/Coreball/",
-    "logo": "/g/Coreball/IMG_4632.jpeg"
-  },
-  {
-    "id": "DM",
-    "name": "Doge Miner",
-    "url": "/g/Doge-Miner/",
-    "logo": "/g/Doge-Miner/IMG_2926.jpeg"
-  },
-  {
-    "id": "CSGO",
-    "name": "CSGO Clicker",
-    "url": "/g/CSGO-Clicker/",
-    "logo": "/g/CSGO-Clicker/IMG_2921.jpeg"
-  },
-  {
-    "id": "AU",
-    "name": "Among Us",
-    "url": "/g/Among-Us/",
-    "logo": "/g/Among-Us/image.png"
-  },
-  {
-    "id": "DB",
-    "name": "Drift Boss",
-    "url": "/g/Driftboss/",
-    "logo": "/g/Driftboss/drift-boss.png"
-  },
-  {
-    "id": "ES",
-    "name": "Edge Surf",
-    "url": "/g/Edgesurf",
-    "logo": "/g/Edgesurf/splash.png"
-  },
-  {
-    "id": "EC",
-    "name": "EuroCup",
-    "url": "/g/EuroCup/",
-    "logo": "/g/EuroCup/android-icon-192x192.png"
-  },
-  {
-    "id": "fbs",
-    "name": "FactoryBallz",
-    "url": "/g/FactoryBallsForever/",
-    "logo": "/g/FactoryBallsForever/IMG_2930.jpeg"
-  },
-  {
-    "id": "Gs",
-    "name": "Gunspin",
-    "url": "/g/GunSpin/",
-    "logo": "/g/GunSpin/IMG_2653.jpeg"
-  },
-  {
-    "id": "IB",
-    "name": "Idle Breakout",
-    "url": "/g/IdleBreakout/",
-    "logo": "/g/IdleBreakout/img/thumbnail.png"
-  },
-  {
-    "id": "MM",
-    "name": "Monkey Mart",
-    "url": "/g/Monkey-mart/",
-    "logo": "/g/Monkey-mart/MonkeyMart.jpeg"
-  },
-  {
-    "id": "OO",
-    "name": "OvO",
-    "url": "/g/OVO/",
-    "logo": "/g/OVO/IMG_1710.jpeg"
-  },
-  {
     "id": "color-switch",
-    "name": "Color-Switch",
+    "name": "Color Switch",
     "url": "g/Color-Switch/index.html",
     "logo": "g/Color-Switch/CS.jpeg"
   },
   {
     "id": "defendthetank",
-    "name": "Defendthetank",
+    "name": "Defend The Tank",
     "url": "g/Defendthetank/index.html",
     "logo": "g/Defendthetank/landscape.jpg"
   },
@@ -409,37 +211,37 @@
   },
   {
     "id": "flappy2048",
-    "name": "Flappy2048",
+    "name": "Flappy 2048",
     "url": "g/Flappy2048/index.html",
     "logo": "g/Flappy2048/IMG_2931.jpeg"
   },
   {
     "id": "red-button",
-    "name": "Red-button",
+    "name": "Red Button",
     "url": "g/Red-button/index.html",
     "logo": "g/Red-button/bigredbutton.png"
   },
   {
     "id": "retro-bowl",
-    "name": "Retro-bowl",
+    "name": "Retro Bowl",
     "url": "g/Retro-bowl/index.html",
     "logo": "g/Retro-bowl/retro.png"
   },
   {
     "id": "smallworldcup",
-    "name": "Smallworldcup",
+    "name": "Small World Cup",
     "url": "g/Smallworldcup/index.html",
     "logo": "g/Smallworldcup/icon-256.png"
   },
   {
     "id": "stickman-hook",
-    "name": "Stickman-hook",
+    "name": "Stickman Hook",
     "url": "g/Stickman-hook/index.html",
     "logo": "g/Stickman-hook/unnamed.jpg"
   },
   {
     "id": "subwaysurfers",
-    "name": "Subwaysurfers",
+    "name": "Subway Surfers",
     "url": "g/Subwaysurfers/index.html",
     "logo": "g/Subwaysurfers/IMG_4627.jpeg"
   },
@@ -450,50 +252,38 @@
     "logo": "g/Swoop/IMG_3096.jpeg"
   },
   {
-    "id": "territorial.io",
-    "name": "Territorial.io",
-    "url": "g/Territorial.io/index.html",
-    "logo": "g/Territorial.io/IMG_4692.jpeg"
-  },
-  {
-    "id": "ckc",
-    "name": "ckc",
-    "url": "g/ckc/index.html",
-    "logo": "g/ckc/IMG_2664_enhanced.jpeg.png"
-  },
-  {
     "id": "drawhill",
-    "name": "drawhill",
+    "name": "Draw Hill",
     "url": "g/drawhill/index.html",
     "logo": "g/drawhill/IMG_4641.jpeg"
   },
   {
     "id": "learntoflyidle",
-    "name": "learntoflyidle",
+    "name": "Learn To Fly Idle",
     "url": "g/learntoflyidle/index.html",
     "logo": "g/learntoflyidle/icon.jpg"
   },
   {
     "id": "snowbattle",
-    "name": "snowbattle",
+    "name": "Snow Battle",
     "url": "g/snowbattle/index.html",
     "logo": "g/snowbattle/IMG_4643.jpeg"
   },
   {
     "id": "tanukisunset",
-    "name": "tanukisunset",
+    "name": "Tanuki Sunset",
     "url": "g/tanukisunset/index.html",
     "logo": "g/tanukisunset/IMG_4647.jpeg"
   },
   {
     "id": "tinyfishing",
-    "name": "tinyfishing",
+    "name": "Tiny Fishing",
     "url": "g/tinyfishing/index.html",
     "logo": "g/tinyfishing/IMG_4650.jpeg"
   },
   {
     "id": "wordle",
-    "name": "wordle",
+    "name": "Wordle",
     "url": "g/wordle/index.html",
     "logo": "g/wordle/IMG_4645.jpeg"
   },
@@ -505,68 +295,38 @@
   },
   {
     "id": "bottlejump",
-    "name": "bottlejump",
+    "name": "Bottle Jump",
     "url": "g/bottlejump/index.html",
     "logo": "g/bottlejump/IMG_3025.png"
   },
   {
     "id": "bowmasters",
-    "name": "bowmasters",
+    "name": "Bow Masters",
     "url": "g/bowmasters/index.html",
     "logo": "g/bowmasters/IMG_3026.png"
   },
   {
     "id": "motox3m",
-    "name": "motox3m",
+    "name": "Moto X3M",
     "url": "g/motox3m/index.html",
     "logo": "g/motox3m/IMG_3029.jpeg"
   },
   {
     "id": "8ball",
-    "name": "8ball",
+    "name": "8 Ball",
     "url": "g/8ball/index.html",
     "logo": "g/8ball/IMG_3041.jpeg"
   },
   {
     "id": "blackjack",
-    "name": "blackjack",
+    "name": "Black Jack",
     "url": "g/blackjack/index.html",
     "logo": "g/blackjack/IMG_3038.png"
   },
   {
     "id": "blockblast",
-    "name": "blockblast",
+    "name": "Block Blast",
     "url": "g/blockblast/index.html",
     "logo": "g/blockblast/IMG_3021.jpeg"
-  },
-  {
-    "id": "candycrush",
-    "name": "candycrush",
-    "url": "g/candycrush/index.html",
-    "logo": "g/candycrush/IMG_3040.webp"
-  },
-  {
-    "id": "paperio2",
-    "name": "paperio2",
-    "url": "g/paperio2/index.html",
-    "logo": "g/paperio2/IMG_3042.webp"
-  },
-  {
-    "id": "richrun",
-    "name": "richrun",
-    "url": "g/richrun/index.html",
-    "logo": "g/richrun/IMG_3037.jpeg"
-  },
-  {
-    "id": "bounce-masters",
-    "name": "bounce-masters",
-    "url": "g/bounce-masters/index.html",
-    "logo": "g/bounce-masters/IMG_3046.png"
-  },
-  {
-    "id": "idle-mining-empire",
-    "name": "idle-mining-empire",
-    "url": "g/idle-mining-empire/index.html",
-    "logo": "g/idle-mining-empire/IMG_3043.png"
   }
 ]
