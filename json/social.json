@@ -306,12 +306,6 @@
     "logo": "g/bowmasters/IMG_3026.png"
   },
   {
-    "id": "motox3m",
-    "name": "Moto X3M",
-    "url": "g/motox3m/index.html",
-    "logo": "g/motox3m/IMG_3029.jpeg"
-  },
-  {
     "id": "8ball",
     "name": "8 Ball",
     "url": "g/8ball/index.html",
@@ -328,5 +322,59 @@
     "name": "Block Blast",
     "url": "g/blockblast/index.html",
     "logo": "g/blockblast/IMG_3021.jpeg"
+  },
+  {
+    "id": "territorial.io",
+    "name": "Territorial.io",
+    "url": "g/Territorial.io",
+    "logo": "g/Territorial.io/IMG_2918.png"
+  },
+  {
+    "id": "bounce-masters",
+    "name": "bounce-masters",
+    "url": "g/bounce-masters",
+    "logo": "g/bounce-masters/IMG_3046.png"
+  },
+  {
+    "id": "candycrush",
+    "name": "candycrush",
+    "url": "g/candycrush",
+    "logo": "g/candycrush/IMG_3040.webp"
+  },
+  {
+    "id": "chromedino",
+    "name": "chromedino",
+    "url": "g/chromedino",
+    "logo": "g/chromedino/IMG_4722.jpeg"
+  },
+  {
+    "id": "ckc",
+    "name": "Creative Kill Chamber",
+    "url": "g/ckc",
+    "logo": "g/ckc/IMG_2664_enhanced.jpeg.png"
+  },
+  {
+    "id": "idle-mining-empire",
+    "name": "idle mining empire",
+    "url": "g/idle-mining-empire",
+    "logo": "g/idle-mining-empire/IMG_3043.png"
+  },
+  {
+    "id": "paperio2",
+    "name": "paperio2",
+    "url": "g/paperio2",
+    "logo": "g/paperio2/IMG_3042.webp"
+  },
+  {
+    "id": "rdh",
+    "name": "rdh",
+    "url": "g/rdh",
+    "logo": "g/rdh/image.png"
+  },
+  {
+    "id": "richrun",
+    "name": "Rich Run (peak brainrot)",
+    "url": "g/richrun",
+    "logo": "g/richrun/IMG_3037.jpeg"
   }
 ]
