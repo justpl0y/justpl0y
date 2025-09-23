@@ -5,33 +5,47 @@ JSON_FILE="json/social.json"
 GAMES_DIR="g"
 TMP=$(mktemp)
 
-# ensure json file exists
+# ensure JSON file exists
 if [ ! -f "$JSON_FILE" ]; then
   echo "[]" > "$JSON_FILE"
 fi
 
+# supported image formats
+IMG_EXTENSIONS=("png" "jpg" "jpeg" "webp" "gif" "svg" "bmp" "ico" "avif")
+
+# function to find first image in a folder
+find_first_image() {
+  local folder="$1"
+  for ext in "${IMG_EXTENSIONS[@]}"; do
+    img=$(find "$folder" -maxdepth 1 -type f -iname "*.$ext" | head -n1)
+    if [ -n "$img" ]; then
+      echo "$img"
+      return
+    fi
+  done
+}
+
 # add missing games
 for game in "$GAMES_DIR"/*; do
   if [ -d "$game" ] && [ -f "$game/index.html" ]; then
+    logo_file=$(find_first_image "$game")
+
+    # skip if no image found
+    if [ -z "$logo_file" ]; then
+      echo "⏭ Skipping $(basename "$game") (no image found)"
+      continue
+    fi
+
     game_name=$(basename "$game")
     game_id=$(echo "$game_name" | tr '[:upper:]' '[:lower:]')
     game_url="$GAMES_DIR/$game_name/index.html"
+    logo_rel="${logo_file#./}"  # relative path
 
     # check if already exists by id OR url
     exists=$(jq --arg id "$game_id" --arg url "$game_url" '[.[] | select(.id==$id or .url==$url)] | length' "$JSON_FILE")
     if [ "$exists" -eq 0 ]; then
       echo "➕ Adding $game_name"
-
-      # first image in folder for logo
-      logo_file=$(find "$game" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) | head -n1)
-      if [ -n "$logo_file" ]; then
-        # relative path from current directory
-        logo_rel="${logo_file#./}"
-      else
-        logo_rel=""
-      fi
-
-      # add new entry without touching other existing fields
+      # add new entry
       jq --arg id "$game_id" \
          --arg name "$game_name" \
          --arg url "$game_url" \
