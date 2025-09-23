@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Directory</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  ul { list-style: none; padding: 0; }
+  li { margin: 10px 0; }
+  a { text-decoration: none; color: #0077cc; }
+  a:hover { text-decoration: underline; }
+  .count { color: #555; margin-left: 8px; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<h1>JustPl0y/g Directory</h1>
+<ul id="dirList"></ul>
+
+<script>
+const owner = "justpl0y";
+const repo = "justpl0y";
+const folder = "g";
+
+async function fetchDirs() {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}`);
+  const items = await res.json();
+  const list = document.getElementById('dirList');
+
+  const dirs = items.filter(item => item.type === "dir");
+
+  for (const dir of dirs) {
+    const filesRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${dir.name}`);
+    const files = await filesRes.json();
+    const fileCount = files.filter(f => f.type === "file").length;
+
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `https://justpl0y.github.io/justpl0y/g/${dir.name}/`; // GitHub Pages link
+    a.textContent = dir.name;
+    li.appendChild(a);
+
+    const span = document.createElement('span');
+    span.className = 'count';
+    span.textContent = `(${fileCount} files)`;
+    li.appendChild(span);
+
+    list.appendChild(li);
+  }
+}
+
+fetchDirs();
+</script>
+</body>
+</html>
