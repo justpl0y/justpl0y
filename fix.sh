@@ -7,7 +7,14 @@ TMP=$(mktemp)
 
 # ensure JSON file exists
 if [ ! -f "$JSON_FILE" ]; then
+  mkdir -p "$(dirname "$JSON_FILE")"
   echo "[]" > "$JSON_FILE"
+fi
+
+# ensure games dir exists
+if [ ! -d "$GAMES_DIR" ]; then
+  echo "⚠️ Games directory '$GAMES_DIR' not found. Exiting."
+  exit 0
 fi
 
 # supported image formats
@@ -27,7 +34,7 @@ find_first_image() {
 
 # add missing games
 for game in "$GAMES_DIR"/*; do
-  if [ -d "$game" ] && [ -f "$game/index.html" ]; then
+  if [ -d "$game" ]; then
     logo_file=$(find_first_image "$game")
 
     # skip if no image found
@@ -38,7 +45,7 @@ for game in "$GAMES_DIR"/*; do
 
     game_name=$(basename "$game")
     game_id=$(echo "$game_name" | tr '[:upper:]' '[:lower:]')
-    game_url="$GAMES_DIR/$game_name/index.html"
+    game_url="$GAMES_DIR/$game_name"  # no longer forcing index.html
     logo_rel="${logo_file#./}"  # relative path
 
     # check if already exists by id OR url
