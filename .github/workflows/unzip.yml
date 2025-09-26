@@ -20,19 +20,11 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
 
-      - name: Download h.zip from Release
+      - name: Download h.zip from direct URL
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          H_URL: "https://release-assets.githubusercontent.com/github-production-release-asset/1055132028/b811f265-8688-4be4-92bf-01f7457cd26d?sp=r&sv=2018-11-09&sr=b&spr=https&se=2025-09-26T01%3A58%3A40Z&rscd=attachment%3B+filename%3Dh.zip&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2025-09-26T00%3A58%3A34Z&ske=2025-09-26T01%3A58%3A40Z&sks=b&skv=2018-11-09&sig=18ABMGYSK7VdzeDoTFPq1pwqT7PwjQs8BrnXhUIC38k%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc1ODg1MDE0MCwibmJmIjoxNzU4ODQ5ODQwLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.LpNPqpdP1jT-vJrjF7fmXSsolYEQu1Cbl6YtxBFtBmQ"
         run: |
-          REPO="${{ github.repository }}"
-          RELEASE_TAG="v1.0" # replace with your release tag
-          ASSET_NAME="h.zip" # replace with your asset name
-
-          ASSET_ID=$(gh release view $RELEASE_TAG --repo $REPO --json assets | jq -r ".assets[] | select(.name==\"$ASSET_NAME\") | .id")
-          curl -L -H "Authorization: token $GITHUB_TOKEN" \
-               -H "Accept: application/octet-stream" \
-               -o h.zip \
-               "https://api.github.com/repos/$REPO/releases/assets/$ASSET_ID"
+          curl -L -o h.zip "$H_URL"
 
       - name: Unzip h.zip into g/
         run: |
