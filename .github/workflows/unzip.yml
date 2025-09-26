@@ -1,26 +1,55 @@
-name: YouTube Playable Full Capture
+name: Commit Workflow and Capture
 
 on:
   workflow_dispatch:
 
 jobs:
-  capture-site:
+  commit-and-capture:
     runs-on: ubuntu-latest
-
     steps:
-      # 1️⃣ Setup Node.js
+      # 1️⃣ Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Git
+      - name: Setup Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      # 3️⃣ Ensure files are staged and commit
+      - name: Stage and commit changes
+        run: |
+          git status
+          git add .
+          echo "Files staged:"
+          git status --short
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Add/Update workflow and capture scripts"
+            echo "Committed changes."
+          fi
+
+      # 4️⃣ Push changes
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin HEAD
+
+      # 5️⃣ Install Node.js and dependencies
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 2️⃣ Install dependencies
       - name: Install dependencies
         run: |
           npm init -y
           npm install puppeteer archiver mime-types
 
-      # 3️⃣ Capture site and zip preserving folder structure
+      # 6️⃣ Capture site and create ZIP
       - name: Capture site and zip
         run: |
           node - <<'EOF'
@@ -31,10 +60,9 @@ jobs:
           import { URL } from "url";
           import path from "path";
 
-          const OUTPUT_ZIP = "site-capture.zip";
+          const OUTPUT_ZIP = path.resolve(process.cwd(), "site-capture.zip");
           const TARGET_URL = "https://www.youtube.com/playables/UgkxSUcfCPPSO-h1TE0jTP3nacjZ8oHUipgL";
 
-          // Convert URL to safe file path, preserving folders
           function sanitizePath(urlObj, contentType) {
             let pathname = decodeURIComponent(urlObj.pathname || "/");
             if (!pathname || pathname.endsWith("/")) pathname += "index.html";
@@ -43,69 +71,42 @@ jobs:
               const ext = mime.extension(contentType);
               if (ext) pathname += "." + ext;
             }
-            // Remove leading slash
             if (pathname.startsWith("/")) pathname = pathname.slice(1);
             return pathname;
           }
 
-          async function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-          }
+          async function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
           async function capture() {
-            const browser = await puppeteer.launch({
-              headless: true,
-              args: ["--no-sandbox", "--disable-setuid-sandbox"]
-            });
+            const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox","--disable-setuid-sandbox"] });
             const page = await browser.newPage();
 
             const assets = new Map();
             const filenameCount = {};
 
-            // Capture all network responses
-            page.on("response", async (response) => {
+            page.on("response", async (res) => {
               try {
-                const req = response.request();
-                const url = req.url();
+                const url = res.url();
                 if (!url.startsWith("http")) return;
-
-                const ct = response.headers()["content-type"] || "application/octet-stream";
-                const buffer = await response.buffer().catch(() => null);
+                const ct = res.headers()["content-type"] || "application/octet-stream";
+                const buffer = await res.buffer().catch(() => null);
                 if (!buffer) return;
-
                 let pathname = sanitizePath(new URL(url), ct);
-
-                // Deduplicate filenames if necessary
                 if (filenameCount[pathname]) {
                   const ext = path.extname(pathname);
-                  const name = pathname.slice(0, -ext.length);
+                  const name = pathname.slice(0,-ext.length);
                   pathname = `${name}_${filenameCount[pathname]}${ext}`;
                   filenameCount[pathname] += 1;
-                } else {
-                  filenameCount[pathname] = 1;
-                }
-
-                if (!assets.has(pathname)) {
-                  assets.set(pathname, buffer);
-                }
+                } else { filenameCount[pathname] = 1; }
+                if (!assets.has(pathname)) assets.set(pathname, buffer);
               } catch {}
             });
 
-            // Open the page
             await page.goto(TARGET_URL, { waitUntil: "networkidle2" });
-
-            // Click the first button (playable)
-            await page.evaluate(() => {
-              const btn = document.querySelector("button");
-              if (btn) btn.click();
-            });
-
-            // Wait 10 seconds for dynamic requests
+            await page.evaluate(() => { const btn = document.querySelector("button"); if(btn) btn.click(); });
             await sleep(10000);
-
             await browser.close();
 
-            // Create ZIP archive preserving folders
             const output = fs.createWriteStream(OUTPUT_ZIP);
             const archive = archiver("zip", { zlib: { level: 9 } });
             archive.pipe(output);
@@ -114,16 +115,21 @@ jobs:
               archive.append(buffer, { name: pathname });
             }
 
-            await archive.finalize();
+            await new Promise((resolve, reject) => {
+              archive.on("end", resolve);
+              archive.on("error", reject);
+              archive.finalize();
+            });
+
             console.log(`Saved full site capture as ${OUTPUT_ZIP}`);
           }
 
           capture();
           EOF
 
-      # 4️⃣ Upload ZIP artifact using v4
+      # 7️⃣ Upload ZIP artifact using v4
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
         with:
           name: site-capture
-          path: site-capture.zip
+          path: ./site-capture.zip
