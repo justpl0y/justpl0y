@@ -26,13 +26,20 @@ jobs:
         run: |
           curl -L -o h.zip "$H_URL"
 
-      - name: Unzip h.zip into g/
+      - name: Unzip h.zip into g/ and touch files
         run: |
           mkdir -p g
           unzip -o h.zip -d g
+          # Update modification time to ensure git detects changes
+          find g -type f -exec touch {} +
 
       - name: Commit and push extracted files
         run: |
           git add g
-          git diff --quiet && echo "No changes to commit" || git commit -m "Unzip h.zip into g/"
-          git push origin HEAD
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 1
+          else
+            git commit -m "Unzip h.zip into g/"
+            git push origin HEAD
+          fi
