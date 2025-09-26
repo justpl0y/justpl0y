@@ -1,32 +1,28 @@
 name: YouTube Playable Capture
 
 on:
-  workflow_dispatch: # Run manually from GitHub Actions UI
+  workflow_dispatch:
 
 jobs:
   capture-site:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Setup Node.js environment
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      # 2️⃣ Install required packages at runtime
       - name: Install dependencies
         run: |
           npm init -y
           npm install puppeteer archiver mime-types
 
-      # 3️⃣ Capture the site and zip all network requests
       - name: Capture site and zip
         run: |
           node - <<'EOF'
           import puppeteer from "puppeteer";
           import fs from "fs";
-          import path from "path";
           import archiver from "archiver";
           import mime from "mime-types";
           import { URL } from "url";
@@ -34,7 +30,6 @@ jobs:
           const OUTPUT_ZIP = "site-capture.zip";
           const TARGET_URL = "https://www.youtube.com/playables/UgkxSUcfCPPSO-h1TE0jTP3nacjZ8oHUipgL";
 
-          // Function to sanitize URLs into safe file paths
           function sanitizePath(urlObj, contentType) {
             let pathname = decodeURIComponent(urlObj.pathname || "/");
             if (!pathname || pathname.endsWith("/")) pathname += "index.html";
@@ -54,10 +49,8 @@ jobs:
             });
             const page = await browser.newPage();
 
-            // Map to store all captured responses
             const assets = new Map();
 
-            // Listen to all network responses
             page.on("response", async (response) => {
               try {
                 const req = response.request();
@@ -70,27 +63,22 @@ jobs:
 
                 const pathname = sanitizePath(new URL(url), ct);
                 if (!assets.has(pathname)) {
-                  assets.set(pathname, buffer); // Save the response buffer
+                  assets.set(pathname, buffer);
                 }
               } catch {}
             });
 
-            // Open the playable URL
             await page.goto(TARGET_URL, { waitUntil: "networkidle2" });
 
-            // Click the first button (playable) on the page
             await page.evaluate(() => {
               const btn = document.querySelector("button");
               if (btn) btn.click();
             });
 
-            // Wait 10s to allow all dynamic requests to load
             await page.waitForTimeout(10000);
 
-            // Close the browser
             await browser.close();
 
-            // Create a ZIP archive of all captured network responses
             const output = fs.createWriteStream(OUTPUT_ZIP);
             const archive = archiver("zip", { zlib: { level: 9 } });
             archive.pipe(output);
@@ -103,13 +91,12 @@ jobs:
             console.log(`Saved site capture as ${OUTPUT_ZIP}`);
           }
 
-          // Run capture function
           capture();
           EOF
 
-      # 4️⃣ Upload the ZIP as a GitHub Actions artifact
+      # ✅ Updated artifact upload to v4
       - name: Upload ZIP artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: site-capture
           path: site-capture.zip
