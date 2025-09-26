@@ -22,7 +22,7 @@ jobs:
 
       - name: Download h.zip from direct URL
         env:
-          H_URL: "https://github.com/justpl0y/justpl0y/releases/download/sowwy/h.zip"
+          H_URL: "https://github.com/justpl0y/justpl0y/releases/download/sowwy/bouncemasters.zip"
         run: |
           curl -L -o h.zip "$H_URL"
 
