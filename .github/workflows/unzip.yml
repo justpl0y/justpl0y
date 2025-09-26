@@ -1,45 +1,115 @@
-name: Download, Unzip to g/, and Commit
+name: YouTube Playable Capture
 
 on:
-  workflow_dispatch:
-
-permissions:
-  contents: write
+  workflow_dispatch: # Run manually from GitHub Actions UI
 
 jobs:
-  unzip-and-commit:
+  capture-site:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # 1️⃣ Setup Node.js environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          persist-credentials: true
+          node-version: 20
 
-      - name: Configure Git
+      # 2️⃣ Install required packages at runtime
+      - name: Install dependencies
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          npm init -y
+          npm install puppeteer archiver mime-types
 
-      - name: Download h.zip from direct URL
-        env:
-          H_URL: "https://github.com/justpl0y/justpl0y/releases/download/sowwy/bouncemasters.zip"
+      # 3️⃣ Capture the site and zip all network requests
+      - name: Capture site and zip
         run: |
-          curl -L -o h.zip "$H_URL"
+          node - <<'EOF'
+          import puppeteer from "puppeteer";
+          import fs from "fs";
+          import path from "path";
+          import archiver from "archiver";
+          import mime from "mime-types";
+          import { URL } from "url";
 
-      - name: Unzip h.zip into g/ and touch files
-        run: |
-          mkdir -p g
-          unzip -o h.zip -d g
-          # Update modification time to ensure git detects changes
-          find g -type f -exec touch {} +
+          const OUTPUT_ZIP = "site-capture.zip";
+          const TARGET_URL = "https://www.youtube.com/playables/UgkxSUcfCPPSO-h1TE0jTP3nacjZ8oHUipgL";
 
-      - name: Commit and push extracted files
-        run: |
-          git add g
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 1
-          else
-            git commit -m "Unzip h.zip into g/"
-            git push origin HEAD
-          fi
+          // Function to sanitize URLs into safe file paths
+          function sanitizePath(urlObj, contentType) {
+            let pathname = decodeURIComponent(urlObj.pathname || "/");
+            if (!pathname || pathname.endsWith("/")) pathname += "index.html";
+            if (pathname.startsWith("/")) pathname = pathname.slice(1);
+            pathname = pathname.replace(/(^|[\\/])\.+(?=$|[\\/])/g, "_");
+            if (!pathname.includes(".")) {
+              const ext = mime.extension(contentType);
+              if (ext) pathname += "." + ext;
+            }
+            return pathname;
+          }
+
+          async function capture() {
+            const browser = await puppeteer.launch({
+              headless: true,
+              args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            });
+            const page = await browser.newPage();
+
+            // Map to store all captured responses
+            const assets = new Map();
+
+            // Listen to all network responses
+            page.on("response", async (response) => {
+              try {
+                const req = response.request();
+                const url = req.url();
+                if (!url.startsWith("http")) return;
+
+                const ct = response.headers()["content-type"] || "application/octet-stream";
+                const buffer = await response.buffer().catch(() => null);
+                if (!buffer) return;
+
+                const pathname = sanitizePath(new URL(url), ct);
+                if (!assets.has(pathname)) {
+                  assets.set(pathname, buffer); // Save the response buffer
+                }
+              } catch {}
+            });
+
+            // Open the playable URL
+            await page.goto(TARGET_URL, { waitUntil: "networkidle2" });
+
+            // Click the first button (playable) on the page
+            await page.evaluate(() => {
+              const btn = document.querySelector("button");
+              if (btn) btn.click();
+            });
+
+            // Wait 10s to allow all dynamic requests to load
+            await page.waitForTimeout(10000);
+
+            // Close the browser
+            await browser.close();
+
+            // Create a ZIP archive of all captured network responses
+            const output = fs.createWriteStream(OUTPUT_ZIP);
+            const archive = archiver("zip", { zlib: { level: 9 } });
+            archive.pipe(output);
+
+            for (const [pathname, buffer] of assets.entries()) {
+              archive.append(buffer, { name: pathname });
+            }
+
+            await archive.finalize();
+            console.log(`Saved site capture as ${OUTPUT_ZIP}`);
+          }
+
+          // Run capture function
+          capture();
+          EOF
+
+      # 4️⃣ Upload the ZIP as a GitHub Actions artifact
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: site-capture
+          path: site-capture.zip
