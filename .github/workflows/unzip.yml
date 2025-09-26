@@ -1,4 +1,4 @@
-name: YouTube Playable Capture
+name: YouTube Playable Full Capture
 
 on:
   workflow_dispatch:
@@ -8,16 +8,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
+      # 2️⃣ Install dependencies
       - name: Install dependencies
         run: |
           npm init -y
           npm install puppeteer archiver mime-types
 
+      # 3️⃣ Capture site and zip preserving folder structure
       - name: Capture site and zip
         run: |
           node - <<'EOF'
@@ -26,20 +29,27 @@ jobs:
           import archiver from "archiver";
           import mime from "mime-types";
           import { URL } from "url";
+          import path from "path";
 
           const OUTPUT_ZIP = "site-capture.zip";
           const TARGET_URL = "https://www.youtube.com/playables/UgkxSUcfCPPSO-h1TE0jTP3nacjZ8oHUipgL";
 
+          // Convert URL to safe file path, preserving folders
           function sanitizePath(urlObj, contentType) {
             let pathname = decodeURIComponent(urlObj.pathname || "/");
             if (!pathname || pathname.endsWith("/")) pathname += "index.html";
-            if (pathname.startsWith("/")) pathname = pathname.slice(1);
             pathname = pathname.replace(/(^|[\\/])\.+(?=$|[\\/])/g, "_");
             if (!pathname.includes(".")) {
               const ext = mime.extension(contentType);
               if (ext) pathname += "." + ext;
             }
+            // Remove leading slash
+            if (pathname.startsWith("/")) pathname = pathname.slice(1);
             return pathname;
+          }
+
+          async function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
           }
 
           async function capture() {
@@ -50,7 +60,9 @@ jobs:
             const page = await browser.newPage();
 
             const assets = new Map();
+            const filenameCount = {};
 
+            // Capture all network responses
             page.on("response", async (response) => {
               try {
                 const req = response.request();
@@ -61,24 +73,39 @@ jobs:
                 const buffer = await response.buffer().catch(() => null);
                 if (!buffer) return;
 
-                const pathname = sanitizePath(new URL(url), ct);
+                let pathname = sanitizePath(new URL(url), ct);
+
+                // Deduplicate filenames if necessary
+                if (filenameCount[pathname]) {
+                  const ext = path.extname(pathname);
+                  const name = pathname.slice(0, -ext.length);
+                  pathname = `${name}_${filenameCount[pathname]}${ext}`;
+                  filenameCount[pathname] += 1;
+                } else {
+                  filenameCount[pathname] = 1;
+                }
+
                 if (!assets.has(pathname)) {
                   assets.set(pathname, buffer);
                 }
               } catch {}
             });
 
+            // Open the page
             await page.goto(TARGET_URL, { waitUntil: "networkidle2" });
 
+            // Click the first button (playable)
             await page.evaluate(() => {
               const btn = document.querySelector("button");
               if (btn) btn.click();
             });
 
-            await page.waitForTimeout(10000);
+            // Wait 10 seconds for dynamic requests
+            await sleep(10000);
 
             await browser.close();
 
+            // Create ZIP archive preserving folders
             const output = fs.createWriteStream(OUTPUT_ZIP);
             const archive = archiver("zip", { zlib: { level: 9 } });
             archive.pipe(output);
@@ -88,13 +115,13 @@ jobs:
             }
 
             await archive.finalize();
-            console.log(`Saved site capture as ${OUTPUT_ZIP}`);
+            console.log(`Saved full site capture as ${OUTPUT_ZIP}`);
           }
 
           capture();
           EOF
 
-      # ✅ Updated artifact upload to v4
+      # 4️⃣ Upload ZIP artifact using v4
       - name: Upload ZIP artifact
         uses: actions/upload-artifact@v4
         with:
