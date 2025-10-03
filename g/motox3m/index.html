@@ -1,121 +1,69 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
-    <link rel="stylesheet" href="assets/css/app.css" type="text/css" />
-    <title>MotoX3M</title>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-7L02W3ZMS5"></script>
 <script>
-(function() {
-    const fakeHref = "https://jasontheone111.github.io";
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-    // Proxy window.location
-    const locationProxy = new Proxy(window.location, {
-        get(target, prop) {
-            if (prop === "href") return fakeHref;
-            if (prop === "toString") return () => fakeHref;
-            return target[prop];
-        },
-        set(target, prop, value) {
-            if (prop === "href") {
-                console.log("Attempted navigation to:", value);
-                return true; // prevent actual navigation
-            }
-            target[prop] = value;
-            return true;
-        }
-    });
-
-    Object.defineProperty(window, "location", {
-        get() { return locationProxy; },
-        set(val) { console.log("Blocked navigation to:", val); }
-    });
-})();
-</script>
-
-
-          <style type="text/css">
-            .no-select {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-            }
-          </style>
-        
-          <script type="text/javascript">
-            setTimeout(function(){
-              if(document.getElementsByTagName("canvas").length) {
-                document.getElementsByTagName("body")[0].classList.add("no-select")
-              }
-            }, 2000);
-          </script>
-        <script type="text/javascript">
-          function setUserAgent(window, userAgent) {
-           // Works on Firefox, Chrome, Opera and IE9+
-            if (navigator.__defineGetter__) {
-                navigator.__defineGetter__("userAgent", function () {
-                    return userAgent;
-                });
-            } else if (Object.defineProperty) {
-                Object.defineProperty(navigator, "userAgent", {
-                    get: function () {
-                        return userAgent;
-                    }
-                });
-            }
-            // Works on Safari
-            if (window.navigator.userAgent !== userAgent) {
-                var userAgentProp = {
-                    get: function () {
-                        return userAgent;
-                    }
-                };
-                try {
-                    Object.defineProperty(window.navigator, "userAgent", userAgentProp);
-                } catch (e) {
-                    window.navigator = Object.create(navigator, {
-                        userAgent: userAgentProp
-                    });
-                }
-            }
-          }
-          if(window.navigator.userAgent.indexOf("Safari")>=0 && "ontouchstart" in window && window.navigator.userAgent.indexOf("iPhone")== -1) {
-            //var userAgent = window.navigator.userAgent.replace("Macintosh", "iPad");
-            var userAgent = "Mozilla/5.0 (iPad; CPU OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.1 Mobile/15E148 Safari/604.1";
-            setUserAgent(window,userAgent);
-          }
-          </script>
-        </head>
-<body>
-    <div id="content"></div>
-    <div id="orientation"></div>
-    <div id="loader">Loading ...</div>
-    <script type="text/javascript" src="assets/box2dweb/nape.min.js">
-        var nape = "nape.min.js";
+    gtag('config', 'G-7L02W3ZMS5');
     </script>
-    <script type="text/javascript" src="assets/box2dweb/nape-debug-draw.min.js"></script>
-    <script type="text/javascript" src="assets/box2dweb/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="assets/box2dweb/easeljs-0.8.2.combined.js"></script>
-	<script type="text/javascript" src="assets/box2dweb/bluebird.min.js"></script>
-<script type="text/javascript" src="motox3m4.min.js?7c244cab919211eaf53d"></script><script>function fnSendMsg(evt){
-        	window.parent.postMessage('keypress-from-game', '*');
+<script async="" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5648726754785335"></script>
+<meta charset="utf-8"/>
+<meta content="ie=edge" http-equiv="x-ua-compatible"/>
+<meta content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport"/>
+<link href="assets/css/app.css" rel="stylesheet" type="text/css"/>
+<meta content="moto-x3m.png" property="og:image">
+<title>Moto X3M</title>
+<script type="text/javascript">
+        var useEvents = (typeof(Event) === 'function');
+
+        var myDispatchEvent = function (name){
+            var event;
+            if (useEvents){
+                event =  new Event(name);
+            }else{
+                event = document.createEvent('Event');
+                event.initEvent(name, true, true);
+            }
+            document.getElementById("content").dispatchEvent(event);
         }
-        document.body.addEventListener('click', function(event) {
-          fnSendMsg(event);
-        });
-        document.addEventListener('keypress', function(event) {
-        	 fnSendMsg(event);
-        });
-        document.addEventListener('keydown', function (e) {
-        	 fnSendMsg(event);
-        });
-        document.addEventListener('keyup', function (e) {
-        	  fnSendMsg(event);
-        });
-        </script></body>
-</html>
+        var nape = "nape.mi.js";
+
+        window.famobi_onPauseRequested = function(){
+            // code that pauses/mutes the game
+            console.log('ad started');
+            myDispatchEvent('SDK_GAME_PAUSE');
+        };
+
+        window.famobi_onResumeRequested = function(){
+            // code that unpauses/unmutes the game
+            console.log('ad resumed');
+            myDispatchEvent('SDK_GAME_START');
+        };
+
+        window.famobi_gameID = 'moto-x3m'; // the actual GAMEID is added to the final version by Famobi
+        window.famobi_gameJS = ['js/all.js',
+            function() {
+                // start the game
+                window.famobi_started = true;
+                myDispatchEvent('start_game');
+            }
+        ];
+        (function (document, url, fgJS, firstJS) {
+            fgJS = document.createElement('script');
+            firstJS = document.getElementsByTagName('script')[0];
+            fgJS.src = url + encodeURIComponent(document.location.href);
+            firstJS.parentNode.insertBefore(fgJS, firstJS);
+            })(document, 'js/start.js?e=');
+    </script>
+
+</meta></head>
+<body>
+<div id="content"></div>
+<div id="orientation"></div>
+<div id="loader">Loading ...</div>
+</body></html>
