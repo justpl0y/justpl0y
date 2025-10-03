@@ -7,17 +7,34 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <link rel="stylesheet" href="assets/css/app.css" type="text/css" />
     <title>MotoX3M</title>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-98DP5VKS42"></script>
 <script>
-	/*
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+(function() {
+    const fakeHref = "https://jasontheone111.github.io";
 
-  gtag('config', 'G-98DP5VKS42');
-  */
+    // Proxy window.location
+    const locationProxy = new Proxy(window.location, {
+        get(target, prop) {
+            if (prop === "href") return fakeHref;
+            if (prop === "toString") return () => fakeHref;
+            return target[prop];
+        },
+        set(target, prop, value) {
+            if (prop === "href") {
+                console.log("Attempted navigation to:", value);
+                return true; // prevent actual navigation
+            }
+            target[prop] = value;
+            return true;
+        }
+    });
+
+    Object.defineProperty(window, "location", {
+        get() { return locationProxy; },
+        set(val) { console.log("Blocked navigation to:", val); }
+    });
+})();
 </script>
+
 
           <style type="text/css">
             .no-select {
