@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realistic Poker Duel</title>
+<style>
+:root {
+  --felt: #0a3d24;
+  --felt-dark: #062e1a;
+  --wood: #3e2b1a;
+  --accent: #f2b632;
+  --text: #fff6e1;
+  --shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+body {
+  margin:0;
+  background: #0a2d1d;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--text);
+}
+#table {
+  position: relative;
+  width: 900px;
+  height: 550px;
+  border-radius: 300px / 180px;
+  background: radial-gradient(circle at center, #0a3d24 0%, #062e1a 100%);
+  border: 20px solid var(--wood);
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+#pot {
+  font-size: 1.4rem;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(242,182,50,0.8);
+  font-weight: bold;
+  position: relative;
+}
+.board, .players {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+.card {
+  width: 70px;
+  height: 100px;
+  border-radius: 8px;
+  background: #fff;
+  color: black;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+  transform: rotateY(180deg);
+  transition: transform 0.6s;
+}
+.card.flip { transform: rotateY(0deg); }
+.card.♥, .card.♦ { color:red; }
+.hidden { background: repeating-linear-gradient(45deg,#b91c1c,#b91c1c 10px,#a31616 10px,#a31616 20px); color: transparent; transform: rotateY(0deg); }
+#controls { display: flex; flex-wrap: wrap; justify-content: center; gap:8px; margin-top:5px; position: relative; }
+button.chip {
+  background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+  border: 2px solid #999;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+  transition: transform 0.1s;
+  position: relative;
+  z-index: 2;
+}
+button.chip:active { transform: scale(1.2); }
+#currentBet { position:absolute; bottom:70px; font-weight:bold; color:#ffd369; font-size:1.2rem; animation:pop 0.3s ease; z-index:3; }
+@keyframes pop { 0% {transform: scale(1);} 50% {transform: scale(1.3);} 100% {transform: scale(1);} }
+#actionButtons { display:flex; gap:10px; margin-top:10px; }
+button.action { padding:8px 15px; border-radius:6px; background:#f2b632; border:none; font-weight:bold; cursor:pointer; }
+button.action:hover { background:#ffd369; }
+#status { margin-top:5px; text-align:center; font-weight:500; }
+.money { font-size:0.9rem; color:#fff6e1; margin-top:5px; }
+.chip-pot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  font-weight: bold;
+  text-align: center;
+  line-height: 40px;
+  color: #000;
+  background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+  border:2px solid #999;
+  z-index:1;
+  transition: transform 0.5s, opacity 0.5s;
+}
+</style>
+</head>
+<body>
+<div id="table">
+  <div id="dealerHand" class="players"></div>
+  <div>
+    <div id="pot">Pot: $0</div>
+    <div class="board" id="board"></div>
+  </div>
+  <div id="playerHand" class="players"></div>
+
+  <div id="controls">
+    <button class="chip" data-value="100">$100</button>
+    <button class="chip" data-value="200">$200</button>
+    <button class="chip" data-value="300">$300</button>
+    <button class="chip" data-value="500">$500</button>
+    <button class="chip" data-value="1000">$1K</button>
+    <div id="currentBet">Current Bet: $0</div>
+    <div id="actionButtons">
+      <button class="action" id="confirmBet">Place Bet</button>
+      <button class="action" id="foldBtn">Fold</button>
+      <button class="action" id="nextBtn">Next Round</button>
+    </div>
+  </div>
+
+  <div class="money" id="playerMoney"></div>
+  <div id="status"></div>
+</div>
+
+<script>
+const suits=["♠","♥","♦","♣"];
+const values=["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+let deck=[],player={hand:[],money:1000},dealer={hand:[]},board=[],pot=0,roundOver=false,currentBet=0;
+
+// LocalStorage
+function saveState(){ localStorage.setItem('pokerGame',JSON.stringify({playerMoney:player.money})); }
+function loadState(){ const s=JSON.parse(localStorage.getItem('pokerGame')); if(s) player.money=s.playerMoney; }
+
+function createDeck(){deck=[]; for(let s of suits) for(let v of values) deck.push(v+s); deck.sort(()=>Math.random()-0.5);}
+function dealCard(to,n){for(let i=0;i<n;i++) to.push(deck.pop());}
+
+function render(){
+  document.getElementById("board").innerHTML=board.map(c=>`<div class='card ${c.slice(-1)} flip'>${c}</div>`).join("");
+  document.getElementById("dealerHand").innerHTML=dealer.hand.map(c=>`<div class='card ${c.slice(-1)} ${roundOver?'flip hidden':''}'>${c}</div>`).join("");
+  document.getElementById("playerHand").innerHTML=player.hand.map(c=>`<div class='card ${c.slice(-1)} flip'>${c}</div>`).join("");
+  document.getElementById("pot").innerText=`Pot: $${pot}`;
+  document.getElementById("playerMoney").innerText=`You: $${player.money}`;
+  document.getElementById("currentBet").innerText=`Current Bet: $${currentBet}`;
+}
+
+function handValue(cards){
+  let ranks=cards.map(c=>values.indexOf(c.slice(0,-1))).sort((a,b)=>a-b);
+  let unique=new Set(ranks);
+  let pairs=ranks.length-unique.size;
+  let score=Math.max(...ranks)+pairs*13;
+  return score;
+}
+
+function dealerDecision(){
+  let hv=handValue(dealer.hand.concat(board));
+  if(hv>25) return "bet";
+  if(hv>15) return Math.random()<0.7?"bet":"check";
+  return Math.random()<0.4?"bet":"fold";
+}
+
+function checkWinner(){
+  let ph=handValue(player.hand.concat(board));
+  let dh=handValue(dealer.hand.concat(board));
+  if(ph>dh){ player.money+=pot; setStatus("🏆 You win this round!"); }
+  else if(dh>ph){ setStatus("🤖 Dealer wins this round!"); }
+  else { player.money+=pot/2; setStatus("🤝 It's a draw!"); }
+  pot=0; currentBet=0; roundOver=true; render(); saveState();
+}
+
+function setStatus(t){document.getElementById("status").innerText=t;}
+function newRound(){
+  roundOver=false; board=[]; player.hand=[]; dealer.hand=[]; pot=0; currentBet=0;
+  createDeck(); dealCard(player.hand,2); dealCard(dealer.hand,2); dealCard(board,3);
+  setStatus("New round started. Click chips to place your bet!");
+  render();
+}
+
+loadState();
+newRound();
+
+// Chips animation
+document.querySelectorAll("button.chip").forEach(b=>{
+  b.addEventListener("click",()=>{
+    let val=parseInt(b.dataset.value);
+    if(val>player.money-currentBet) val=player.money-currentBet;
+    currentBet+=val;
+    animateChip(b,val);
+    render();
+  });
+});
+
+function animateChip(button,value){
+  const chip=document.createElement('div');
+  chip.className='chip-pot';
+  chip.innerText=value;
+  const rect=button.getBoundingClientRect();
+  const potRect=document.getElementById("pot").getBoundingClientRect();
+  chip.style.left=rect.left+'px';
+  chip.style.top=rect.top+'px';
+  document.body.appendChild(chip);
+  setTimeout(()=>{ 
+    chip.style.transform=`translate(${potRect.left-rect.left}px,${potRect.top-rect.top}px) scale(0.5)`;
+    chip.style.opacity='0.8';
+  },10);
+  setTimeout(()=>{ document.body.removeChild(chip); },600);
+}
+
+// Confirm bet
+document.getElementById("confirmBet").onclick=()=>{
+  if(currentBet<=0){ setStatus("Select a bet first!"); return; }
+  player.money-=currentBet; pot+=currentBet;
+  setStatus(`You bet $${currentBet}. Dealer is processing...`);
+  render(); saveState();
+  setTimeout(()=>{
+    let action=dealerDecision();
+    if(action==="fold"){ player.money+=pot; pot=0; setStatus("Dealer folded! You win!"); roundOver=true; render(); saveState(); return; }
+    if(action==="bet"){ let bamt=currentBet; pot+=bamt; setStatus(`Dealer matched your bet.`); }
+    else setStatus("Dealer checked.");
+    dealCard(board,1);
+    if(board.length>=5){ checkWinner(); }
+    render();
+  },1000);
+};
+
+// Fold
+document.getElementById("foldBtn").onclick=()=>{
+  if(roundOver) return; setStatus("You folded! Dealer wins."); pot=0; currentBet=0; roundOver=true; render(); saveState();
+};
+
+// Next round
+document.getElementById("nextBtn").onclick=newRound;
+
+</script>
+</body>
+</html>
