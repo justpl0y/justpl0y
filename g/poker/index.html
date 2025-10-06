@@ -7,7 +7,6 @@
 <style>
 :root {
   --felt: #0a3d24;
-  --felt-dark: #062e1a;
   --wood: #3e2b1a;
   --accent: #f2b632;
   --text: #fff6e1;
@@ -15,7 +14,7 @@
 }
 body {
   margin:0;
-  background: #0a2d1d;
+  background: #081b12;
   font-family: 'Poppins', sans-serif;
   display: flex;
   justify-content: center;
@@ -38,21 +37,19 @@ body {
   padding: 20px 0;
 }
 #pot {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: var(--accent);
-  text-shadow: 0 0 8px rgba(242,182,50,0.8);
+  text-shadow: 0 0 12px rgba(242,182,50,0.9);
   font-weight: bold;
   position: relative;
+  transition: all 0.3s;
 }
-.board, .players {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
+#pot.glow { text-shadow: 0 0 15px #ffd369, 0 0 25px #ffd369; transform: scale(1.1);}
+.board, .players { display: flex; justify-content: center; gap: 12px; }
 .card {
   width: 70px;
   height: 100px;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #fff;
   color: black;
   font-weight: bold;
@@ -103,10 +100,13 @@ button.action:hover { background:#ffd369; }
   z-index:1;
   transition: transform 0.5s, opacity 0.5s;
 }
+#clearBet { position:absolute; top:10px; right:10px; padding:8px 12px; border-radius:6px; background:#f23e3e; border:none; color:white; cursor:pointer; font-weight:bold; }
+#clearBet:hover { background:#ff5757; }
 </style>
 </head>
 <body>
 <div id="table">
+  <button id="clearBet">Clear Bet</button>
   <div id="dealerHand" class="players"></div>
   <div>
     <div id="pot">Pot: $0</div>
@@ -139,11 +139,13 @@ let deck=[],player={hand:[],money:1000},dealer={hand:[]},board=[],pot=0,roundOve
 
 // LocalStorage
 function saveState(){ localStorage.setItem('pokerGame',JSON.stringify({playerMoney:player.money})); }
-function loadState(){ const s=JSON.parse(localStorage.getItem('pokerGame')); if(s) player.money=s.playerMoney; }
+function loadState(){ const s=JSON.parse(localStorage.getItem('pokerGame')); if(s) player.money=s.playerMoney; if(player.money<=0) player.money=100; }
 
+// Deck & dealing
 function createDeck(){deck=[]; for(let s of suits) for(let v of values) deck.push(v+s); deck.sort(()=>Math.random()-0.5);}
 function dealCard(to,n){for(let i=0;i<n;i++) to.push(deck.pop());}
 
+// Rendering
 function render(){
   document.getElementById("board").innerHTML=board.map(c=>`<div class='card ${c.slice(-1)} flip'>${c}</div>`).join("");
   document.getElementById("dealerHand").innerHTML=dealer.hand.map(c=>`<div class='card ${c.slice(-1)} ${roundOver?'flip hidden':''}'>${c}</div>`).join("");
@@ -153,6 +155,7 @@ function render(){
   document.getElementById("currentBet").innerText=`Current Bet: $${currentBet}`;
 }
 
+// Simple hand value
 function handValue(cards){
   let ranks=cards.map(c=>values.indexOf(c.slice(0,-1))).sort((a,b)=>a-b);
   let unique=new Set(ranks);
@@ -161,6 +164,7 @@ function handValue(cards){
   return score;
 }
 
+// Dealer AI
 function dealerDecision(){
   let hv=handValue(dealer.hand.concat(board));
   if(hv>25) return "bet";
@@ -168,6 +172,7 @@ function dealerDecision(){
   return Math.random()<0.4?"bet":"fold";
 }
 
+// Winner check
 function checkWinner(){
   let ph=handValue(player.hand.concat(board));
   let dh=handValue(dealer.hand.concat(board));
@@ -177,12 +182,16 @@ function checkWinner(){
   pot=0; currentBet=0; roundOver=true; render(); saveState();
 }
 
+// Status
 function setStatus(t){document.getElementById("status").innerText=t;}
+
+// New round
 function newRound(){
   roundOver=false; board=[]; player.hand=[]; dealer.hand=[]; pot=0; currentBet=0;
   createDeck(); dealCard(player.hand,2); dealCard(dealer.hand,2); dealCard(board,3);
   setStatus("New round started. Click chips to place your bet!");
   render();
+  saveState();
 }
 
 loadState();
@@ -211,6 +220,8 @@ function animateChip(button,value){
   setTimeout(()=>{ 
     chip.style.transform=`translate(${potRect.left-rect.left}px,${potRect.top-rect.top}px) scale(0.5)`;
     chip.style.opacity='0.8';
+    document.getElementById("pot").classList.add("glow");
+    setTimeout(()=>{ document.getElementById("pot").classList.remove("glow"); },400);
   },10);
   setTimeout(()=>{ document.body.removeChild(chip); },600);
 }
@@ -218,7 +229,8 @@ function animateChip(button,value){
 // Confirm bet
 document.getElementById("confirmBet").onclick=()=>{
   if(currentBet<=0){ setStatus("Select a bet first!"); return; }
-  player.money-=currentBet; pot+=currentBet;
+  player.money-=currentBet; if(player.money<=0) player.money=100;
+  pot+=currentBet;
   setStatus(`You bet $${currentBet}. Dealer is processing...`);
   render(); saveState();
   setTimeout(()=>{
@@ -240,6 +252,12 @@ document.getElementById("foldBtn").onclick=()=>{
 // Next round
 document.getElementById("nextBtn").onclick=newRound;
 
+// Clear bet
+document.getElementById("clearBet").onclick=()=>{
+  currentBet=0;
+  render();
+  setStatus("Bet cleared!");
+};
 </script>
 </body>
 </html>
