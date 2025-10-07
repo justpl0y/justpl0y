@@ -1,4 +1,4 @@
-name: Generate study.yml
+name: Generate game paths
 
 on:
   push:
@@ -19,8 +19,9 @@ jobs:
           for dir in g/*/ ; do
             if [ -d "$dir" ]; then
               folder=$(basename "$dir")
+              clean_dir="${dir%/}"          # remove trailing slash
               echo "  - name: $folder" >> study.yml
-              echo "    href: $dirindex.html" >> study.yml
+              echo "    href: $clean_dir/index.html" >> study.yml
             fi
           done
 
