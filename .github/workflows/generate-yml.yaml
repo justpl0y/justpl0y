@@ -20,7 +20,7 @@ jobs:
             if [ -d "$dir" ]; then
               folder=$(basename "$dir")
               echo "  - name: $folder" >> study.yml
-              echo "    href: $dir/index.html" >> study.yml
+              echo "    href: $dirindex.html" >> study.yml
             fi
           done
 
