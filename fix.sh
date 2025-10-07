@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 JSON_FILE="json/social.json"
 GAMES_DIR="g"
 TMP=$(mktemp)
