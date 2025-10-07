@@ -1,0 +1,33 @@
+name: Generate study.yml
+
+on:
+  push:
+    paths:
+      - 'g/**'
+  workflow_dispatch:
+
+jobs:
+  generate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate study.yml
+        run: |
+          echo "games:" > study.yml
+          for dir in g/*/ ; do
+            if [ -d "$dir" ]; then
+              folder=$(basename "$dir")
+              echo "  - name: $folder" >> study.yml
+              echo "    href: $dir/index.html" >> study.yml
+            fi
+          done
+
+      - name: Commit study.yml
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add study.yml
+          git diff --cached --quiet || git commit -m "Update study.yml [skip ci]"
+          git push
