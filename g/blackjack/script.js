@@ -15,7 +15,7 @@ dealerWinSound.volume = 0.1;
 playerWinSound.volume = 0.1;
 gameDrawnSound.volume = 0.1;
 
-let money = parseInt(localStorage.getItem("money")) || 1000; // start with 1000 default
+let money = parseInt(localStorage.getItem("money")) || 100; // start with 1000 default
 let wins = parseInt(localStorage.getItem("wins")) || 0; // track wins to make game harder
 let gameLive = false;
 balance.innerText = money;
@@ -199,3 +199,4 @@ update(locations[0]);
 showDealerCard();
 textleft.innerText = 'Welcome to BlackJack';
 textright.innerText = 'Choose Bet';
+
