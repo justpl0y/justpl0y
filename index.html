@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Directory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JustPl0y/g Directory</title>
 <style>
   body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
   h1 { margin-bottom: 10px; }
@@ -10,39 +11,49 @@
   li { margin: 8px 0; }
   a { text-decoration: none; color: #0077cc; font-weight: bold; }
   a:hover { text-decoration: underline; }
-  .count { color: #555; margin-left: 8px; font-size: 0.9em; }
   .total { font-size: 1em; color: #333; margin-bottom: 15px; }
+  .loading { color: #555; font-style: italic; }
 </style>
 </head>
 <body>
 <h1>JustPl0y/g Directory</h1>
-<div class="total" id="totalFolders"></div>
+<div class="total" id="totalFolders">Loading...</div>
 <ul id="dirList"></ul>
 
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 <script>
-const owner = "justpl0y";
-const repo = "justpl0y";
-const folder = "g";
-
 async function fetchDirs() {
+  const totalEl = document.getElementById('totalFolders');
+  const listEl = document.getElementById('dirList');
+
   try {
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}`);
-    if (!res.ok) throw new Error("Failed to fetch folder contents");
-    const items = await res.json();
-    const list = document.getElementById('dirList');
-    const dirs = items.filter(item => item.type === "dir");
-    document.getElementById('totalFolders').textContent = `Total games: ${dirs.length}`;
+    const res = await fetch('study.yml'); // Fetch pre-generated YAML
+    if (!res.ok) throw new Error("Failed to load study.yml");
+    const text = await res.text();
+    const data = jsyaml.load(text);
+    const dirs = data.games || [];
+
+    if (!dirs.length) {
+      totalEl.textContent = "No games found.";
+      return;
+    }
+
+    totalEl.textContent = `Total games: ${dirs.length}`;
+    listEl.innerHTML = '';
+
     dirs.forEach(dir => {
       const li = document.createElement('li');
       const a = document.createElement('a');
-      a.href = `https://${owner}.github.io/${repo}/g/${dir.name}/`;
+      a.href = dir.href; // points to g/folder/index.html
       a.textContent = dir.name;
       li.appendChild(a);
-      list.appendChild(li);
+      listEl.appendChild(li);
     });
+
   } catch (err) {
     console.error(err);
-    document.getElementById('dirList').textContent = "Failed to load folders.";
+    totalEl.textContent = "Failed to load folders.";
+    listEl.innerHTML = '<li class="loading">Try refreshing the page & if this keeps occuring contact site owner...</li>';
   }
 }
 
