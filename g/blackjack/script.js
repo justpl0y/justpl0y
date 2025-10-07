@@ -15,15 +15,17 @@ dealerWinSound.volume = 0.1;
 playerWinSound.volume = 0.1;
 gameDrawnSound.volume = 0.1;
 
-let money = parseInt(localStorage.getItem("money")) || 100; // start with 1000 default
-let wins = parseInt(localStorage.getItem("wins")) || 0; // track wins to make game harder
+let money = parseInt(localStorage.getItem("money")) || 100;
+let wins = parseInt(localStorage.getItem("wins")) || 0;
+let losses = parseInt(localStorage.getItem("losses")) || 0;
+let lossStreak = parseInt(localStorage.getItem("lossStreak")) || 0;
 let gameLive = false;
 balance.innerText = money;
 
 const deck = [];
 ["Hearts", "Diamonds", "Clubs", "Spades"].forEach(suit => {
-  for (let type of ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]) {
-    const value = type === "A" ? 11 : ["J", "Q", "K"].includes(type) ? 10 : parseInt(type);
+  for (let type of ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]) {
+    const value = type === "A" ? 11 : ["J","Q","K"].includes(type) ? 10 : parseInt(type);
     deck.push({ suit, type, value });
   }
 });
@@ -37,12 +39,24 @@ let bet;
 function saveProgress() {
   localStorage.setItem("money", money);
   localStorage.setItem("wins", wins);
+  localStorage.setItem("losses", losses);
+  localStorage.setItem("lossStreak", lossStreak);
 }
 
 function drawCard() {
   drawCardSound.play();
-  const index = Math.floor(Math.random() * deck.length);
-  const card = deck[index];
+  let filteredDeck = [...deck];
+  const easyBonus = Math.max(0, lossStreak - 2);
+  if (easyBonus > 0) {
+    filteredDeck = deck.flatMap(card => {
+      let weight = 1;
+      if (card.value >= 2 && card.value <= 7) weight += 0.2 * easyBonus;
+      if (card.value > 10) weight -= 0.1 * easyBonus;
+      return Array(Math.max(1, Math.floor(weight * 10))).fill(card);
+    });
+  }
+  const index = Math.floor(Math.random() * filteredDeck.length);
+  const card = filteredDeck[index];
   if (card.type === 'A' && userCardCount > 1) return { ...card, value: 1 };
   return card;
 }
@@ -58,15 +72,13 @@ function drawUser() {
   typeU.innerText = card.type;
   userSum += card.value;
   valueU.innerText = userSum;
-
   if (userSum < 21) drawDealer();
   else checkWinnerAndFinishGame();
 }
 
 function drawDealer() {
-  // Harder AI logic: dealer risk tolerance reduces as difficulty rises
-  const difficulty = Math.floor(wins / 3); // increase difficulty every 3 wins
-  let dealerTarget = 17 + Math.min(difficulty, 4); // max 21 target
+  const difficulty = Math.floor(wins / 3);
+  let dealerTarget = 17 + Math.min(difficulty, 4) - Math.max(0, lossStreak - 2);
   if (dealerSum < dealerTarget && dealerSum < userSum) {
     const card = drawCard();
     const suitD = document.querySelector("#suitD");
@@ -90,11 +102,8 @@ function betAmount(amount) {
     showDealerCard();
     drawUser();
     saveProgress();
-  } else if (gameLive) {
-    alert("Game ongoing, finish this round first!");
-  } else {
-    alert("Not enough money!");
-  }
+  } else if (gameLive) alert("Game ongoing, finish this round first!");
+  else alert("Not enough money!");
 }
 
 function checkWinnerAndFinishGame() {
@@ -104,14 +113,16 @@ function checkWinnerAndFinishGame() {
   else if (userSum > 21) winner = 'Dealer';
   else if (userSum === dealerSum) winner = 'Drawn';
   else winner = userSum > dealerSum ? 'Player' : 'Dealer';
-
   if (winner === 'Player') {
     wins++;
-    money += bet * (1.8 - Math.min(0.1 * Math.floor(wins / 3), 0.3)); // harder → smaller reward
+    lossStreak = 0;
+    money += Math.floor(bet * (1.8 - Math.min(0.1 * Math.floor(wins / 3), 0.3)));
     textleft.innerText = 'You Win';
-    textleft.style.color = "rgb(3, 255, 3)";
+    textleft.style.color = "rgb(3,255,3)";
     playerWinSound.play();
   } else if (winner === 'Dealer') {
+    losses++;
+    lossStreak++;
     textleft.innerText = "Dealer Wins";
     textleft.style.color = "red";
     dealerWinSound.play();
@@ -121,7 +132,6 @@ function checkWinnerAndFinishGame() {
     textleft.style.color = "#ffbd08";
     gameDrawnSound.play();
   }
-
   balance.innerText = money;
   userCardCount = 0;
   userSum = 0;
@@ -133,9 +143,7 @@ function hold() {
   if (gameLive && userCardCount >= 2) {
     drawDealer();
     checkWinnerAndFinishGame();
-  } else {
-    alert('You must draw at least two cards before holding.');
-  }
+  } else alert('You must draw at least two cards before holding.');
 }
 
 function double() {
@@ -146,9 +154,7 @@ function double() {
     textright.innerText = "Doubled Bet";
     drawUser();
     saveProgress();
-  } else {
-    alert("Not enough money to double!");
-  }
+  } else alert("Not enough money to double!");
 }
 
 function showDealerCard() {
@@ -170,17 +176,17 @@ function showDealerCard() {
 const locations = [
   {
     name: "Bet Menu",
-    "button text": ["$100", "$500", "$1000"],
+    "button text": ["$100","$500","$1000"],
     "button functions": [() => betAmount(100), () => betAmount(500), () => betAmount(1000)],
     textleft: "Choose your bet",
-    textright: "Choose New Bet",
+    textright: "Choose New Bet"
   },
   {
     name: "Game Menu",
-    "button text": ["Draw", "Hold", "Double"],
+    "button text": ["Draw","Hold","Double"],
     "button functions": [drawUser, hold, double],
     textleft: "Dealing...",
-    textright: "Choose",
+    textright: "Choose"
   }
 ];
 
@@ -199,4 +205,3 @@ update(locations[0]);
 showDealerCard();
 textleft.innerText = 'Welcome to BlackJack';
 textright.innerText = 'Choose Bet';
-
