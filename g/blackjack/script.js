@@ -20,19 +20,27 @@ let lossStreak = parseInt(localStorage.getItem("lossStreak")) || 0;
 let gameLive = false;
 balance.innerText = money;
 
-const deck = [];
-["Hearts", "Diamonds", "Clubs", "Spades"].forEach(suit => {
-  for (let type of ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]) {
-    const value = type === "A" ? 11 : ["J","Q","K"].includes(type) ? 10 : parseInt(type);
-    deck.push({ suit, type, value });
-  }
-});
+const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
+const types = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
 
-let userCardCount = 0;
+function createDeck() {
+  const deck = [];
+  for (const suit of suits) {
+    for (const type of types) {
+      const value = type === "A" ? 11 : ["J","Q","K"].includes(type) ? 10 : parseInt(type);
+      deck.push({ suit, type, value });
+    }
+  }
+  return deck;
+}
+
+let deck = createDeck();
+let userCards = [];
+let dealerCards = [];
 let userSum = 0;
 let dealerSum = 0;
-let winner;
-let bet;
+let bet = 0;
+let winner = null;
 
 function saveProgress() {
   if (money < 100) money = 100;
@@ -44,158 +52,168 @@ function saveProgress() {
 }
 
 function drawCard() {
-  drawCardSound.play();
-  const card = deck[Math.floor(Math.random() * deck.length)];
+  if (deck.length < 10) deck = createDeck(); // reshuffle automatically
+  const card = deck.splice(Math.floor(Math.random() * deck.length), 1)[0];
+  drawCardSound.play().catch(()=>{});
   return card;
 }
 
-function adjustForAces(sum, cards) {
-  let aceCount = cards.filter(c => c.type === "A").length;
-  while (sum > 21 && aceCount > 0) {
+function adjustForAces(cards) {
+  let sum = cards.reduce((t, c) => t + c.value, 0);
+  let aces = cards.filter(c => c.type === "A").length;
+  while (sum > 21 && aces > 0) {
     sum -= 10;
-    aceCount--;
+    aces--;
   }
   return sum;
 }
 
-const userCards = [];
-const dealerCards = [];
-
-function drawUser() {
-  const card = drawCard();
-  userCards.push(card);
-  const suitU = document.querySelector("#suitU");
-  const typeU = document.querySelector("#typeU");
-  const valueU = document.querySelector("#valueU");
-  userCardCount++;
-  textleft.style.color = "aliceblue";
-  suitU.innerText = card.suit;
-  typeU.innerText = card.type;
-  userSum += card.value;
-  userSum = adjustForAces(userSum, userCards);
-  valueU.innerText = userSum;
-  if (userSum < 21) drawDealer();
-  else checkWinnerAndFinishGame();
+function updateValues() {
+  userSum = adjustForAces(userCards);
+  dealerSum = adjustForAces(dealerCards);
+  document.querySelector("#valueU").innerText = userSum;
+  document.querySelector("#valueD").innerText = dealerSum;
 }
 
-function drawDealer() {
-  const difficulty = Math.floor(wins / 2);
-  let dealerTarget = 18 + Math.min(difficulty, 5);
-  if (dealerSum < dealerTarget && dealerSum < userSum) {
-    const card = drawCard();
-    dealerCards.push(card);
-    const suitD = document.querySelector("#suitD");
-    const typeD = document.querySelector("#typeD");
-    const valueD = document.querySelector("#valueD");
-    suitD.innerText = card.suit;
-    typeD.innerText = card.type;
-    dealerSum += card.value;
-    dealerSum = adjustForAces(dealerSum, dealerCards);
-    valueD.innerText = dealerSum;
-    if (dealerSum >= 21) checkWinnerAndFinishGame();
-  } else checkWinnerAndFinishGame();
+function showCards(player, cards) {
+  const suit = document.querySelector(`#suit${player}`);
+  const type = document.querySelector(`#type${player}`);
+  const value = document.querySelector(`#value${player}`);
+  const card = cards[cards.length - 1];
+  suit.innerText = card.suit;
+  type.innerText = card.type;
+  value.innerText = adjustForAces(cards);
 }
 
 function betAmount(amount) {
-  if (money >= amount && !gameLive) {
-    money -= amount;
-    bet = amount;
-    balance.innerText = money;
-    update(locations[1]);
-    gameLive = true;
-    showDealerCard();
-    userCards.length = 0;
-    dealerCards.length = 0;
-    userSum = 0;
-    dealerSum = 0;
-    drawUser();
-    saveProgress();
-  } else if (gameLive) alert("Game ongoing, finish this round first!");
-  else alert("Not enough money!");
+  if (money < amount) return alert("Not enough money!");
+  if (gameLive) return alert("Game already in progress!");
+
+  money -= amount;
+  bet = amount;
+  balance.innerText = money;
+  gameLive = true;
+  textleft.style.color = "aliceblue";
+  textleft.innerText = "Your Turn";
+  textright.innerText = "Draw or Hold";
+  userCards = [];
+  dealerCards = [];
+  yourcard.style.display = "block";
+  dealercard.style.display = "block";
+
+  // Initial deal (2 each)
+  userCards.push(drawCard(), drawCard());
+  dealerCards.push(drawCard(), drawCard());
+  showCards("U", userCards);
+  showCards("D", dealerCards);
+  updateValues();
+
+  if (userSum === 21) checkWinnerAndFinishGame();
+  saveProgress();
+}
+
+function drawUser() {
+  if (!gameLive) return;
+  const card = drawCard();
+  userCards.push(card);
+  showCards("U", userCards);
+  updateValues();
+  if (userSum >= 21) checkWinnerAndFinishGame();
+}
+
+function dealerPlay() {
+  const difficulty = Math.min(5, Math.floor(wins / 5));
+  while (true) {
+    dealerSum = adjustForAces(dealerCards);
+    const soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
+
+    // Dealer hits until hard 17 or higher (soft 17 = hit)
+    if (dealerSum < 17 || soft17) {
+      dealerCards.push(drawCard());
+      showCards("D", dealerCards);
+      updateValues();
+    } else {
+      // difficulty tweak: higher wins = small chance dealer draws risky card if close to player
+      if (dealerSum < userSum && Math.random() < 0.15 + difficulty * 0.05) {
+        dealerCards.push(drawCard());
+        showCards("D", dealerCards);
+        updateValues();
+      } else break;
+    }
+  }
 }
 
 function checkWinnerAndFinishGame() {
+  if (!gameLive) return;
   gameLive = false;
   update(locations[0]);
-  if (dealerSum > 21) winner = 'Player';
-  else if (userSum > 21) winner = 'Dealer';
-  else if (userSum === dealerSum) winner = 'Drawn';
-  else winner = userSum > dealerSum ? 'Player' : 'Dealer';
 
-  if (winner === 'Player') {
+  dealerPlay();
+  userSum = adjustForAces(userCards);
+  dealerSum = adjustForAces(dealerCards);
+
+  if (userSum > 21) winner = "Dealer";
+  else if (dealerSum > 21) winner = "Player";
+  else if (userSum > dealerSum) winner = "Player";
+  else if (dealerSum > userSum) winner = "Dealer";
+  else winner = "Drawn";
+
+  if (winner === "Player") {
     wins++;
     lossStreak = 0;
-    money += Math.floor(bet * 1.6);
-    textleft.innerText = 'You Win';
+    money += Math.floor(bet * 1.9);
+    textleft.innerText = "You Win!";
     textleft.style.color = "rgb(3,255,3)";
-    playerWinSound.play();
-  } else if (winner === 'Dealer') {
+    playerWinSound.play().catch(()=>{});
+  } else if (winner === "Dealer") {
     losses++;
     lossStreak++;
     textleft.innerText = "Dealer Wins";
     textleft.style.color = "red";
-    dealerWinSound.play();
+    dealerWinSound.play().catch(()=>{});
   } else {
     money += bet;
-    textleft.innerText = 'Game Drawn';
+    textleft.innerText = "Push (Draw)";
     textleft.style.color = "#ffbd08";
-    gameDrawnSound.play();
+    gameDrawnSound.play().catch(()=>{});
   }
 
-  userCardCount = 0;
-  userSum = 0;
-  dealerSum = 0;
   saveProgress();
 }
 
 function hold() {
-  if (gameLive && userCardCount >= 2) {
-    drawDealer();
-    checkWinnerAndFinishGame();
-  } else alert('You must draw at least two cards before holding.');
+  if (!gameLive) return;
+  textleft.innerText = "Dealer's Turn...";
+  dealerPlay();
+  checkWinnerAndFinishGame();
 }
 
 function double() {
-  if (money >= bet && gameLive) {
-    money -= bet;
-    bet *= 2;
-    balance.innerText = money;
-    textright.innerText = "Doubled Bet";
-    drawUser();
-    saveProgress();
-  } else alert("Not enough money to double!");
-}
-
-function showDealerCard() {
-  if (gameLive) {
-    setTimeout(() => {
-      yourcard.style.display = "block";
-      textleft.style.animationName = '';
-      textleft.style.borderRight = 'none';
-      setTimeout(() => {
-        dealercard.style.display = "block";
-      }, 1000);
-    }, 1000);
-  } else {
-    dealercard.style.display = "none";
-    yourcard.style.display = "none";
-  }
+  if (!gameLive) return;
+  if (money < bet) return alert("Not enough money!");
+  money -= bet;
+  bet *= 2;
+  balance.innerText = money;
+  textright.innerText = "Doubled Bet";
+  drawUser();
+  if (userSum <= 21) hold();
+  saveProgress();
 }
 
 const locations = [
   {
     name: "Bet Menu",
-    "button text": ["$100","$500","$1000"],
+    "button text": ["$100", "$500", "$1000"],
     "button functions": [() => betAmount(100), () => betAmount(500), () => betAmount(1000)],
-    textleft: "Choose your bet",
+    textleft: "Place Your Bet",
     textright: "Choose New Bet"
   },
   {
     name: "Game Menu",
-    "button text": ["Draw","Hold","Double"],
+    "button text": ["Draw", "Hold", "Double"],
     "button functions": [drawUser, hold, double],
-    textleft: "Dealing...",
-    textright: "Choose"
+    textleft: "Your Turn",
+    textright: "Draw or Hold"
   }
 ];
 
@@ -211,7 +229,6 @@ function update(location) {
 }
 
 update(locations[0]);
-showDealerCard();
-textleft.innerText = 'Welcome to Hard Mode Blackjack';
-textright.innerText = 'Choose Bet';
+textleft.innerText = "Welcome to Blackjack";
+textright.innerText = "Select a Bet";
 saveProgress();
