@@ -52,7 +52,7 @@ function saveProgress() {
 }
 
 function drawCard() {
-  if (deck.length < 10) deck = createDeck(); // reshuffle automatically
+  if (deck.length < 10) deck = createDeck();
   const card = deck.splice(Math.floor(Math.random() * deck.length), 1)[0];
   drawCardSound.play().catch(()=>{});
   return card;
@@ -101,7 +101,6 @@ function betAmount(amount) {
   yourcard.style.display = "block";
   dealercard.style.display = "block";
 
-  // Initial deal (2 each)
   userCards.push(drawCard(), drawCard());
   dealerCards.push(drawCard(), drawCard());
   showCards("U", userCards);
@@ -122,24 +121,14 @@ function drawUser() {
 }
 
 function dealerPlay() {
-  const difficulty = Math.min(5, Math.floor(wins / 5));
-  while (true) {
-    dealerSum = adjustForAces(dealerCards);
-    const soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
+  dealerSum = adjustForAces(dealerCards);
+  let soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
 
-    // Dealer hits until hard 17 or higher (soft 17 = hit)
-    if (dealerSum < 17 || soft17) {
-      dealerCards.push(drawCard());
-      showCards("D", dealerCards);
-      updateValues();
-    } else {
-      // difficulty tweak: higher wins = small chance dealer draws risky card if close to player
-      if (dealerSum < userSum && Math.random() < 0.15 + difficulty * 0.05) {
-        dealerCards.push(drawCard());
-        showCards("D", dealerCards);
-        updateValues();
-      } else break;
-    }
+  while (dealerSum < 17 || soft17) {
+    dealerCards.push(drawCard());
+    showCards("D", dealerCards);
+    dealerSum = adjustForAces(dealerCards);
+    soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
   }
 }
 
