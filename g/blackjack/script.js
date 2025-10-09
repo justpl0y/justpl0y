@@ -43,7 +43,6 @@ let bet = 0;
 let winner = null;
 
 function saveProgress() {
-  if (money < 100) money = 100;
   localStorage.setItem("money", money);
   localStorage.setItem("wins", wins);
   localStorage.setItem("losses", losses);
@@ -86,7 +85,6 @@ function showCards(player, cards) {
 }
 
 function betAmount(amount) {
-  if (money < amount) return alert("Not enough money!");
   if (gameLive) return alert("Game already in progress!");
 
   money -= amount;
@@ -96,7 +94,6 @@ function betAmount(amount) {
   userCards = [];
   dealerCards = [];
 
-  // switch buttons to game menu
   update(locations[1]);
   textleft.style.color = "aliceblue";
   textleft.innerText = "Your Turn";
@@ -104,7 +101,6 @@ function betAmount(amount) {
   yourcard.style.display = "block";
   dealercard.style.display = "block";
 
-  // initial deal
   userCards.push(drawCard(), drawCard());
   dealerCards.push(drawCard(), drawCard());
   showCards("U", userCards);
@@ -128,11 +124,22 @@ function dealerPlay() {
   dealerSum = adjustForAces(dealerCards);
   let soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
 
-  while (dealerSum < 17 || soft17) {
+  // Dealer difficulty scaling
+  const difficultyBoost = Math.min(lossStreak * 2 + Math.floor(bet / 500), 10);
+  let riskTolerance = 17 + Math.floor(Math.random() * 2 + difficultyBoost / 3);
+
+  while (dealerSum < riskTolerance || soft17) {
     dealerCards.push(drawCard());
     showCards("D", dealerCards);
     dealerSum = adjustForAces(dealerCards);
     soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
+  }
+
+  // Occasionally "cheat" by peeking if difficulty is high
+  if (Math.random() < difficultyBoost / 20 && dealerSum < 21 && userSum <= 21 && dealerSum < userSum) {
+    dealerCards.push(drawCard());
+    showCards("D", dealerCards);
+    dealerSum = adjustForAces(dealerCards);
   }
 }
 
@@ -171,7 +178,7 @@ function checkWinnerAndFinishGame() {
   }
 
   saveProgress();
-  setTimeout(() => update(locations[0]), 1500); // return to bet menu after a short pause
+  setTimeout(() => update(locations[0]), 2000);
 }
 
 function hold() {
@@ -183,7 +190,7 @@ function hold() {
 
 function double() {
   if (!gameLive) return;
-  if (money < bet) return alert("Not enough money!");
+  // Now allows going into debt
   money -= bet;
   bet *= 2;
   balance.innerText = money;
