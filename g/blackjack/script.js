@@ -93,14 +93,18 @@ function betAmount(amount) {
   bet = amount;
   balance.innerText = money;
   gameLive = true;
+  userCards = [];
+  dealerCards = [];
+
+  // switch buttons to game menu
+  update(locations[1]);
   textleft.style.color = "aliceblue";
   textleft.innerText = "Your Turn";
   textright.innerText = "Draw or Hold";
-  userCards = [];
-  dealerCards = [];
   yourcard.style.display = "block";
   dealercard.style.display = "block";
 
+  // initial deal
   userCards.push(drawCard(), drawCard());
   dealerCards.push(drawCard(), drawCard());
   showCards("U", userCards);
@@ -135,7 +139,6 @@ function dealerPlay() {
 function checkWinnerAndFinishGame() {
   if (!gameLive) return;
   gameLive = false;
-  update(locations[0]);
 
   dealerPlay();
   userSum = adjustForAces(userCards);
@@ -168,6 +171,7 @@ function checkWinnerAndFinishGame() {
   }
 
   saveProgress();
+  setTimeout(() => update(locations[0]), 1500); // return to bet menu after a short pause
 }
 
 function hold() {
