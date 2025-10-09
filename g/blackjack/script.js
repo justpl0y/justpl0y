@@ -134,7 +134,7 @@ function dealerPlay() {
     dealerSum = adjustForAces(dealerCards);
     soft17 = dealerSum === 17 && dealerCards.some(c => c.type === "A" && c.value === 11);
   }
-
+  /*
   // Occasionally "cheat" by peeking if difficulty is high
   if (Math.random() < difficultyBoost / 20 && dealerSum < 21 && userSum <= 21 && dealerSum < userSum) {
     dealerCards.push(drawCard());
@@ -142,7 +142,7 @@ function dealerPlay() {
     dealerSum = adjustForAces(dealerCards);
   }
 }
-
+*/
 function checkWinnerAndFinishGame() {
   if (!gameLive) return;
   gameLive = false;
@@ -232,3 +232,4 @@ update(locations[0]);
 textleft.innerText = "Welcome to Blackjack";
 textright.innerText = "Select a Bet";
 saveProgress();
+
