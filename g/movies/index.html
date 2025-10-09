@@ -22,30 +22,9 @@
 <body>
 
 <iframe id="frame"
-  src="https://www.1shows.ru"
+  src="https://filmcave.net"
   sandbox="allow-scripts allow-same-origin"
-  referrerpolicy="no-referrer"
 ></iframe>
-
-<script>
-  const frame = document.getElementById("frame");
-
-  frame.addEventListener("load", () => {
-    try {
-      const win = frame.contentWindow;
-      win.open = () => null;
-      win.document.addEventListener("click", e => {
-        const a = e.target.closest("a[target='_blank']");
-        if (a) {
-          e.preventDefault();
-          win.location.href = a.href;
-        }
-      });
-    } catch {
-      // Cross-origin: sandbox already blocks popups
-    }
-  });
-</script>
 
 </body>
 </html>
