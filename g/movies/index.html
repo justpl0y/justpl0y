@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Full-Page Frame</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #000;
+  }
+  iframe {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+
+<iframe id="frame"
+  src="https://www.1shows.ru"
+  sandbox="allow-scripts allow-same-origin"
+  referrerpolicy="no-referrer"
+></iframe>
+
+<script>
+  const frame = document.getElementById("frame");
+
+  frame.addEventListener("load", () => {
+    try {
+      const win = frame.contentWindow;
+      win.open = () => null;
+      win.document.addEventListener("click", e => {
+        const a = e.target.closest("a[target='_blank']");
+        if (a) {
+          e.preventDefault();
+          win.location.href = a.href;
+        }
+      });
+    } catch {
+      // Cross-origin: sandbox already blocks popups
+    }
+  });
+</script>
+
+</body>
+</html>
