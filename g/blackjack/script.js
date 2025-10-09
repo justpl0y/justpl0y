@@ -233,3 +233,4 @@ textleft.innerText = "Welcome to Blackjack";
 textright.innerText = "Select a Bet";
 saveProgress();
 
+
