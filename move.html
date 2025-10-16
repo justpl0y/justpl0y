@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JustPl0y/g Directory</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    padding: 20px;
+    background: linear-gradient(135deg, #0f111a, #171926);
+    color: #e4e6ef;
+    text-align: center;
+  }
+  h1 {
+    font-size: 2em;
+    color: #89b4fa;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #aab0d0;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    line-height: 1.6;
+  }
+  .notice-box {
+    background: #1a1b29;
+    border: 1px solid #25263a;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 25px auto;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgba(100, 150, 255, 0.15);
+  }
+  button {
+    background: #3b82f6;
+    border: none;
+    color: white;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.2s ease;
+  }
+  button:hover {
+    background: #2563eb;
+    transform: scale(1.03);
+  }
+  .secondary {
+    background: #4b5563;
+  }
+  .secondary:hover {
+    background: #374151;
+  }
+  .total {
+    font-size: 1em;
+    color: #aab0d0;
+    margin-top: 25px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+  }
+  li { margin: 6px 0; }
+  a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+  <h1>JustPl0y/g Directory</h1>
+
+  <div class="notice-box">
+    <h2>🚀 Website Is Moving!</h2>
+    <p>
+      This site is moving to a better, cleaner version!  
+      To keep your game progress, please follow these steps:
+    </p>
+    <ol style="text-align:left; margin: 15px auto; max-width: 500px; color: #cbd5e1;">
+      <li>1. Click the <strong>Export Data</strong> button below.</li>
+      <li>2. Then click <strong>Go To New Site</strong>.</li>
+      <li>3. Once there, go to <strong>Settings → Import Data</strong> and select your exported file.</li>
+    </ol>
+    <button id="exportBtn">📦 Export Data</button>
+    <button class="secondary" id="gotoBtn">🌐 Go To New Site</button>
+    <p style="margin-top:10px; font-size:0.9em; color:#888;">Don’t skip these steps or your game progress won’t transfer.</p>
+  </div>
+
+  <div class="total" id="totalFolders">Loading...</div>
+  <ul id="dirList"></ul>
+
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script>
+async function fetchDirs() {
+  const totalEl = document.getElementById('totalFolders');
+  const listEl = document.getElementById('dirList');
+
+  try {
+    const res = await fetch('study.yml');
+    if (!res.ok) throw new Error("Failed to load study.yml");
+    const text = await res.text();
+    const data = jsyaml.load(text);
+    const dirs = data.games || [];
+
+    if (!dirs.length) {
+      totalEl.textContent = "No games found.";
+      return;
+    }
+
+    totalEl.textContent = `Total games: ${dirs.length}`;
+    listEl.innerHTML = '';
+
+    dirs.forEach(dir => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = dir.href;
+      a.textContent = dir.name;
+      li.appendChild(a);
+      listEl.appendChild(li);
+    });
+
+  } catch (err) {
+    console.error(err);
+    totalEl.textContent = "Failed to load folders.";
+    listEl.innerHTML = '<li>Try refreshing the page & if this keeps occurring, contact site owner...</li>';
+  }
+}
+
+function exportProgress() {
+  const data = {};
+  for (let key in localStorage) {
+    try { data[key] = localStorage.getItem(key); } catch {}
+  }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "game_progress.json";
+  a.click();
+}
+
+document.getElementById('exportBtn').addEventListener('click', exportProgress);
+document.getElementById('gotoBtn').addEventListener('click', () => {
+  window.location.href = "https://newsite.example.com"; // 🔗 replace with your new site URL
+});
+
+fetchDirs();
+</script>
+</body>
+</html>
