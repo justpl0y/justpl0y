@@ -76,11 +76,12 @@
   <h1>JustPl0y/g Directory</h1>
 
   <div class="notice-box">
-    <h2>🚀 Website Is Moving!</h2>
+    <h2>Website is moving!</h2>
     <p>
-      This site is moving to a better, cleaner version!  
-      To keep your game progress, please follow these steps:
-    </p>
+  This site is moving to a newer, cleaner version.  
+  It will shut down in <strong>4 days</strong>.  
+  To keep your game progress, please follow the steps below.
+</p>
     <ol style="text-align:left; margin: 15px auto; max-width: 500px; color: #cbd5e1;">
       <li>1. Click the <strong>Export Data</strong> button below.</li>
       <li>2. Then click <strong>Go To New Site</strong>.</li>
@@ -132,16 +133,31 @@ async function fetchDirs() {
 }
 
 function exportProgress() {
-  const data = {};
+  const data = { localStorage: {}, cookies: {} };
+
+  // Export localStorage
   for (let key in localStorage) {
-    try { data[key] = localStorage.getItem(key); } catch {}
+    try {
+      data.localStorage[key] = localStorage.getItem(key);
+    } catch {}
   }
+
+  // Export cookies
+  document.cookie.split(";").forEach(cookie => {
+    const [name, ...rest] = cookie.split("=");
+    const key = name.trim();
+    const value = rest.join("=").trim();
+    if (key) data.cookies[key] = decodeURIComponent(value);
+  });
+
+  // Create file
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
-  a.download = "game_progress.json";
+  a.download = "JustPl0y_progress.json";
   a.click();
+  URL.revokeObjectURL(url);
 }
 
 document.getElementById('exportBtn').addEventListener('click', exportProgress);
