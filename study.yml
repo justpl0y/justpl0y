@@ -71,6 +71,8 @@ games:
     href: g/blackjack/index.html
   - name: blockblast
     href: g/blockblast/index.html
+  - name: blumgi racers
+    href: g/blumgi racers/index.html
   - name: bottlejump
     href: g/bottlejump/index.html
   - name: bouncemasters
@@ -121,6 +123,8 @@ games:
     href: g/rdh/index.html
   - name: richrun
     href: g/richrun/index.html
+  - name: smash-karts-web
+    href: g/smash-karts-web/index.html
   - name: snowbattle
     href: g/snowbattle/index.html
   - name: speed-stars
